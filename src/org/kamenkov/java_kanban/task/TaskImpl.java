@@ -64,4 +64,24 @@ public class TaskImpl implements Task {
                 ", status=" + status +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TaskImpl task = (TaskImpl) o;
+
+        if (getId() != null ? !getId().equals(task.getId()) : task.getId() != null) return false;
+        if (getSummary() != null ? !getSummary().equals(task.getSummary()) : task.getSummary() != null) return false;
+        return getDescription() != null ? getDescription().equals(task.getDescription()) : task.getDescription() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getSummary() != null ? getSummary().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        return result;
+    }
 }

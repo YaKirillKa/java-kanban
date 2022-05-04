@@ -69,4 +69,22 @@ public class EpicImpl extends TaskImpl implements Epic {
                 ", subtasks=" + subtasks +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        EpicImpl epic = (EpicImpl) o;
+
+        return subtasks != null ? subtasks.equals(epic.subtasks) : epic.subtasks == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (subtasks != null ? subtasks.hashCode() : 0);
+        return result;
+    }
 }
