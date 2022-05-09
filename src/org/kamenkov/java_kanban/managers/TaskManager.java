@@ -9,39 +9,45 @@ import java.util.Collection;
 public interface TaskManager {
 
     /**
-     * Gets all task objects.
+     * Returns all task objects.
+     *
      * @return {@link Collection} of {@link Task}.
      */
     Collection<Task> getAllTaskObjects();
 
     /**
-     * Gets all epic objects.
+     * Returns all epic objects.
+     *
      * @return {@link Collection} of {@link Epic}.
      */
     Collection<Epic> getAllEpicObjects();
 
     /**
-     * Gets all subtask objects.
+     * Returns all subtask objects.
+     *
      * @return {@link Collection} of {@link Subtask}.
      */
     Collection<Subtask> getAllSubtaskObjects();
 
     /**
-     * Gets task object by its ID.
+     * Returns task object by its ID.
+     *
      * @param id unique id of task.
      * @return {@link Task}.
      */
     Task getTaskObjectById(Long id);
 
     /**
-     * Gets epic object by its ID.
+     * Returns epic object by its ID.
+     *
      * @param id unique id of epic.
      * @return {@link Epic}.
      */
     Epic getEpicObjectById(Long id);
 
     /**
-     * Gets subtask object by its ID.
+     * Returns subtask object by its ID.
+     *
      * @param id unique id of subtask.
      * @return {@link Subtask}.
      */
@@ -64,60 +70,70 @@ public interface TaskManager {
 
     /**
      * Put the given {@link Task} to memory.
+     *
      * @param task that should be created.
      */
     Long createTask(Task task);
 
     /**
      * Put the given {@link Epic} to memory.
+     *
      * @param epic that should be created.
      */
     Long createEpic(Epic epic);
 
     /**
      * Put the given {@link Subtask} to memory.
+     *
      * @param subtask that should be created.
      */
     Long createSubtask(Subtask subtask);
 
     /**
      * Update the given {@link Task} in memory.
+     *
      * @param task that should be saved.
      */
     void updateTask(Task task, Long id);
 
     /**
      * Update the given {@link Epic} in memory.
+     *
      * @param epic that should be saved.
      */
     void updateEpic(Epic epic, Long id);
 
     /**
      * Update the given {@link Subtask} in memory.
+     *
      * @param subtask that should be saved.
      */
     void updateSubtask(Subtask subtask, Long id);
 
     /**
      * Remove the given {@link Task} from memory.
+     *
      * @param id of {@link Task} should be deleted.
      */
     void removeTask(Long id);
 
     /**
      * Remove the given {@link Epic} from memory.
+     *
      * @param id of {@link Epic} should be deleted.
      */
     void removeEpic(Long id);
 
     /**
      * Remove the given {@link Subtask} from memory.
+     *
      * @param id of {@link Subtask} should be deleted.
      */
     void removeSubtask(Long id);
 
     /**
-     * Gets all {@link Subtask} from given parent object.
+     * Returns all {@link Subtask} from given parent object.
+     *
      * @param epic subtasks of this should be retrieved.
      * @return {@link Collection} of {@link Subtask}.
      */

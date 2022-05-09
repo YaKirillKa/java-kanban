@@ -1,5 +1,7 @@
 package org.kamenkov.java_kanban.managers;
 
+import org.kamenkov.java_kanban.id.IdManager;
+import org.kamenkov.java_kanban.id.InMemoryIdManager;
 import org.kamenkov.java_kanban.task.Epic;
 import org.kamenkov.java_kanban.task.Subtask;
 import org.kamenkov.java_kanban.task.Task;
@@ -16,14 +18,14 @@ public class InMemoryTaskManager implements TaskManager {
     private static final String ID_CANNOT_BE_NULL = "ID cannot be null";
 
     /* Variable to keep ID unique */
-    private Long lastId;
+    private final IdManager idManager;
     /* Different maps for different types */
     private final Map<Long, Task> tasks;
     private final Map<Long, Epic> epics;
     private final Map<Long, Subtask> subtasks;
 
     public InMemoryTaskManager() {
-        this.lastId = 0L;
+        idManager = InMemoryIdManager.getInstance();
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();
@@ -92,9 +94,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Long createSubtask(Subtask subtask) {
         Epic parentObject = getEpicObjectById(subtask.getParentId());
-        if (parentObject == null) {
-            throw new IllegalArgumentException(PARENT_CANNOT_BE_NULL);
-        }
+        Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
         parentObject.addSubtask(subtask);
         return createTask(subtask, subtasks);
     }
@@ -112,11 +112,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask, Long id) {
         Epic parentObject = getEpicObjectById(subtask.getParentId());
-        if (parentObject == null) {
-            throw new IllegalArgumentException(PARENT_CANNOT_BE_NULL);
-        }
-        parentObject.recalculateStatus();
+        Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
         updateTask(subtask, subtasks, id);
+        parentObject.recalculateStatus();
     }
 
     @Override
@@ -126,11 +124,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpic(Long id) {
-        Epic parent = getEpicObjectById(id);
-        if (parent == null) {
-            throw new IllegalArgumentException(PARENT_CANNOT_BE_NULL);
-        }
-        for (Subtask subtask : parent.getSubtaskObjects()) {
+        Epic parentObject = getEpicObjectById(id);
+        Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
+        for (Subtask subtask : parentObject.getSubtaskObjects()) {
             removeEntryFromMap(subtasks, subtask.getId());
         }
         removeEntryFromMap(epics, id);
@@ -140,9 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeSubtask(Long id) {
         Subtask subtask = getSubtaskObject(id);
         Epic parentObject = getEpicObjectById(subtask.getParentId());
-        if (parentObject == null) {
-            throw new IllegalArgumentException(PARENT_CANNOT_BE_NULL);
-        }
+        Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
         parentObject.removeSubtask(subtask);
         removeEntryFromMap(subtasks, id);
     }
@@ -153,41 +147,35 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private <T extends Task> Long createTask(T taskObject, Map<Long, T> map) {
-        if (map == null) {
-            throw new IllegalArgumentException(MAP_CANNOT_BE_NULL);
-        }
+        Objects.requireNonNull(map, MAP_CANNOT_BE_NULL);
         if (taskObject == null) {
             return null;
         }
-        taskObject.setId(++lastId);
-        map.put(lastId, taskObject);
-        return lastId;
+        taskObject.setId(idManager.getLastId());
+        map.put(idManager.getLastId(), taskObject);
+        return taskObject.getId();
     }
 
     /**
      * Updates task in given map.
+     *
      * @param taskObject object that should be updated in memory.
-     * @param map in which map object should be saved.
-     * @param id unique id of task.
+     * @param map        in which map object should be saved.
+     * @param id         unique id of task.
      * @throws IllegalArgumentException if any of the arguments is null.
      */
     private <T extends Task> void updateTask(T taskObject, Map<Long, T> map, Long id) {
-        if (taskObject == null) {
-            throw new IllegalArgumentException(OBJECT_CANNOT_BE_NULL);
-        }
-        if (map == null) {
-            throw new IllegalArgumentException(MAP_CANNOT_BE_NULL);
-        }
-        if (id == null) {
-            throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
-        }
+        Objects.requireNonNull(taskObject, OBJECT_CANNOT_BE_NULL);
+        Objects.requireNonNull(map, MAP_CANNOT_BE_NULL);
+        Objects.requireNonNull(id, ID_CANNOT_BE_NULL);
         if (map.containsKey(id)) {
             map.put(id, taskObject);
         }
     }
 
     /**
-     * Gets all values of the given map.
+     * Returns all values of the given map.
+     *
      * @param map from which map values should be returned.
      * @return {@link Collection} of the {@link Task} or its child classes
      */
@@ -197,6 +185,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Removes task from the given map.
+     *
      * @param map from which map values should be removed.
      */
     private <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {

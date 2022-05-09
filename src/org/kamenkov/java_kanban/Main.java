@@ -6,7 +6,6 @@ import org.kamenkov.java_kanban.task.*;
 
 public class Main {
     public static void main(String[] args) {
-        //TODO: create tests
         TaskManager taskManager = new InMemoryTaskManager();
         Long firstEpicId = taskManager.createEpic(new EpicImpl("Первый эпик", "Описание первого эпика"));
         Subtask firstSubtaskOfFirstEpic = new SubtaskImpl("Первая сабтаска первого эпика",

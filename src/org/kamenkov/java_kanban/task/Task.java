@@ -5,7 +5,8 @@ import org.kamenkov.java_kanban.Status;
 public interface Task {
 
     /**
-     * Gets summary of {@link Task}.
+     * Returns summary of {@link Task}.
+     *
      * @return summary.
      */
     String getSummary();
@@ -17,7 +18,8 @@ public interface Task {
     void setSummary(String summary);
 
     /**
-     * Gets description of {@link Task}.
+     * Returns description of {@link Task}.
+     *
      * @return description.
      */
     String getDescription();
@@ -29,7 +31,8 @@ public interface Task {
     void setDescription(String description);
 
     /**
-     * Gets status of {@link Task}.
+     * Returns status of {@link Task}.
+     *
      * @return status.
      */
     Status getStatus();
@@ -41,7 +44,8 @@ public interface Task {
     void setStatus(Status status);
 
     /**
-     * Gets id of {@link Task}.
+     * Returns id of {@link Task}.
+     *
      * @return unique id of {@link Task}.
      */
     Long getId();

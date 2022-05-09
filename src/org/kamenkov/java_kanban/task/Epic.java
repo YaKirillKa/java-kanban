@@ -5,19 +5,22 @@ import java.util.List;
 public interface Epic extends Task {
 
     /**
-     * Gets all {@link Subtask}s form the exists {@link Epic}.
+     * Returns all {@link Subtask}s form the exists {@link Epic}.
+     *
      * @return {@link List} of {@link Subtask}.
      */
     List<Subtask> getSubtaskObjects();
 
     /**
      * Add {@link Subtask} to parent Epic.
+     *
      * @param subtask what subtask should be added.
      */
     void addSubtask(Subtask subtask);
 
     /**
      * Remove {@link Subtask} from parent Epic.
+     *
      * @param subtask what subtask should be removed.
      */
     void removeSubtask(Subtask subtask);
