@@ -12,7 +12,7 @@ public class TaskImpl implements Task {
     public TaskImpl(String summary, String description) {
         this.summary = summary;
         this.description = description;
-        status = Status.NEW;
+        this.status = Status.NEW;
     }
 
     @Override
