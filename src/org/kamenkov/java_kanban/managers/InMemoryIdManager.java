@@ -1,4 +1,4 @@
-package org.kamenkov.java_kanban.id;
+package org.kamenkov.java_kanban.managers;
 
 public class InMemoryIdManager implements IdManager {
 

@@ -1,7 +1,5 @@
 package org.kamenkov.java_kanban.managers;
 
-import org.kamenkov.java_kanban.id.IdManager;
-import org.kamenkov.java_kanban.id.InMemoryIdManager;
 import org.kamenkov.java_kanban.task.Epic;
 import org.kamenkov.java_kanban.task.Subtask;
 import org.kamenkov.java_kanban.task.Task;
@@ -17,15 +15,17 @@ public class InMemoryTaskManager implements TaskManager {
     private static final String OBJECT_CANNOT_BE_NULL = "Object cannot be null";
     private static final String ID_CANNOT_BE_NULL = "ID cannot be null";
 
-    /* Variable to keep ID unique */
+    /* Managers */
     private final IdManager idManager;
+    private final HistoryManager historyManager;
     /* Different maps for different types */
     private final Map<Long, Task> tasks;
     private final Map<Long, Epic> epics;
     private final Map<Long, Subtask> subtasks;
 
     public InMemoryTaskManager() {
-        idManager = InMemoryIdManager.getInstance();
+        idManager = Managers.getDefaultIdManager();
+        historyManager = Managers.getDefaultHistoryManager();
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();
@@ -48,17 +48,32 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskObjectById(Long id) {
-        return tasks.get(id);
+        Task task = tasks.get(id);
+        if (task == null) {
+            return null;
+        }
+        historyManager.add(task);
+        return task;
     }
 
     @Override
     public Epic getEpicObjectById(Long id) {
-        return epics.get(id);
+        Epic task = epics.get(id);
+        if (task == null) {
+            return null;
+        }
+        historyManager.add(task);
+        return task;
     }
 
     @Override
     public Subtask getSubtaskObject(Long id) {
-        return subtasks.get(id);
+        Subtask task = subtasks.get(id);
+        if (task == null) {
+            return null;
+        }
+        historyManager.add(task);
+        return task;
     }
 
     @Override
@@ -93,7 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Long createSubtask(Subtask subtask) {
-        Epic parentObject = getEpicObjectById(subtask.getParentId());
+        Epic parentObject = getParentObject(subtask);
         Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
         parentObject.addSubtask(subtask);
         return createTask(subtask, subtasks);
@@ -111,7 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(Subtask subtask, Long id) {
-        Epic parentObject = getEpicObjectById(subtask.getParentId());
+        Epic parentObject = getParentObject(subtask);
         Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
         updateTask(subtask, subtasks, id);
         parentObject.recalculateStatus();
@@ -124,9 +139,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpic(Long id) {
-        Epic parentObject = getEpicObjectById(id);
-        Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
-        for (Subtask subtask : parentObject.getSubtaskObjects()) {
+        Epic epic = epics.get(id);
+        Objects.requireNonNull(epic, OBJECT_CANNOT_BE_NULL);
+        for (Subtask subtask : epic.getSubtaskObjects()) {
             removeEntryFromMap(subtasks, subtask.getId());
         }
         removeEntryFromMap(epics, id);
@@ -135,7 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeSubtask(Long id) {
         Subtask subtask = getSubtaskObject(id);
-        Epic parentObject = getEpicObjectById(subtask.getParentId());
+        Epic parentObject = getParentObject(subtask);
         Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
         parentObject.removeSubtask(subtask);
         removeEntryFromMap(subtasks, id);
@@ -146,13 +161,24 @@ public class InMemoryTaskManager implements TaskManager {
         return epic == null ? null : epic.getSubtaskObjects();
     }
 
+    /**
+     * Returns {@link Epic} object by given {@link Subtask}.
+     *
+     * @param subtask whose parent should be returned.
+     * @return {@link Epic} object.
+     */
+    private Epic getParentObject(Subtask subtask) {
+        return epics.get(subtask.getParentId());
+    }
+
     private <T extends Task> Long createTask(T taskObject, Map<Long, T> map) {
         Objects.requireNonNull(map, MAP_CANNOT_BE_NULL);
         if (taskObject == null) {
             return null;
         }
-        taskObject.setId(idManager.getLastId());
-        map.put(idManager.getLastId(), taskObject);
+        final Long id = idManager.getLastId();
+        taskObject.setId(id);
+        map.put(id, taskObject);
         return taskObject.getId();
     }
 
