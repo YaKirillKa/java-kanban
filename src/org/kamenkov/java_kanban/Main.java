@@ -35,10 +35,11 @@ public class Main {
         System.out.println("История просмотров: " + historyManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
         printAllTasks(taskManager);
         for (int i = 0; i < 14; i++) {
-            taskManager.getEpicObjectById(1L);
+            taskManager.getEpicObjectById(taskManager.createEpic(new EpicImpl("Тестовый эпик", "Описание тестового эпика")));
         }
         taskManager.removeEpic(1L);
         System.out.println("История просмотров: " + historyManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
+        System.out.println("Размер истории: " + historyManager.getHistory().size());
         printAllTasks(taskManager);
     }
 

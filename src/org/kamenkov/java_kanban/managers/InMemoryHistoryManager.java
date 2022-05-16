@@ -11,7 +11,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private static final int HISTORY_DEPTH = 10;
 
     private final List<Task> taskHistory;
-    private static HistoryManager historyManager;
+        private static final HistoryManager HISTORY_MANAGER = new InMemoryHistoryManager();
 
     /**
      * Private constructor to avoid duplicating of the manager.
@@ -22,27 +22,23 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     /**
      * Returns instance of {@link InMemoryHistoryManager}.
-     * If it doesn't exist, creates.
      *
      * @return {@link InMemoryHistoryManager}.
      */
     public static HistoryManager getInstance() {
-        if (historyManager == null) {
-            historyManager = new InMemoryHistoryManager();
-        }
-        return historyManager;
+        return HISTORY_MANAGER;
     }
 
     @Override
     public void add(Task task) {
         taskHistory.add(0, task);
-        if (taskHistory.size() == HISTORY_DEPTH) {
-            taskHistory.remove(HISTORY_DEPTH - 1);
+        if (taskHistory.size() > HISTORY_DEPTH) {
+            taskHistory.remove(HISTORY_DEPTH);
         }
     }
 
     @Override
     public List<Task> getHistory() {
-        return taskHistory;
+        return List.copyOf(taskHistory);
     }
 }
