@@ -11,7 +11,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private static final int HISTORY_DEPTH = 10;
 
     private final List<Task> taskHistory;
-        private static final HistoryManager HISTORY_MANAGER = new InMemoryHistoryManager();
+    private static final HistoryManager HISTORY_MANAGER = new InMemoryHistoryManager();
 
     /**
      * Private constructor to avoid duplicating of the manager.
