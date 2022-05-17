@@ -1,6 +1,5 @@
 package org.kamenkov.java_kanban;
 
-import org.kamenkov.java_kanban.managers.HistoryManager;
 import org.kamenkov.java_kanban.managers.Managers;
 import org.kamenkov.java_kanban.managers.TaskManager;
 import org.kamenkov.java_kanban.task.EpicImpl;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
-        HistoryManager historyManager = Managers.getDefaultHistoryManager();
         Long firstEpicId = taskManager.createEpic(new EpicImpl("Первый эпик", "Описание первого эпика"));
         Subtask firstSubtaskOfFirstEpic = new SubtaskImpl("Первая сабтаска первого эпика",
                 "Описание первой сабтаски первого эпика", firstEpicId);
@@ -32,14 +30,14 @@ public class Main {
         firstSubtaskOfSecondEpic = taskManager.getSubtaskObject(5L);
         firstSubtaskOfSecondEpic.setStatus(Status.DONE);
         taskManager.updateSubtask(firstSubtaskOfSecondEpic, 5L);
-        System.out.println("История просмотров: " + historyManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
+        System.out.println("История просмотров: " + taskManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
         printAllTasks(taskManager);
         for (int i = 0; i < 14; i++) {
             taskManager.getEpicObjectById(taskManager.createEpic(new EpicImpl("Тестовый эпик", "Описание тестового эпика")));
         }
         taskManager.removeEpic(1L);
-        System.out.println("История просмотров: " + historyManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
-        System.out.println("Размер истории: " + historyManager.getHistory().size());
+        System.out.println("История просмотров: " + taskManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
+        System.out.println("Размер истории: " + taskManager.getHistory().size());
         printAllTasks(taskManager);
     }
 

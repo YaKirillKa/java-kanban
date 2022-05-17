@@ -138,4 +138,11 @@ public interface TaskManager {
      * @return {@link Collection} of {@link Subtask}.
      */
     Collection<Subtask> getSubtaskObjectsByParent(Epic epic);
+
+    /**
+     * Returns a {@link Collection} of {@link Task}s that have been viewed by users.
+     *
+     * @return {@link Collection} of {@link Task} or empty {@link Collection}
+     */
+    Collection<Task> getHistory();
 }

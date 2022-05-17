@@ -10,7 +10,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     /* How many items should be saved in history */
     private static final int HISTORY_DEPTH = 10;
 
-    private final List<Task> taskHistory;
+    private final LinkedList<Task> taskHistory;
     private static final HistoryManager HISTORY_MANAGER = new InMemoryHistoryManager();
 
     /**
@@ -31,9 +31,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        taskHistory.add(0, task);
+        taskHistory.addLast(task);
         if (taskHistory.size() > HISTORY_DEPTH) {
-            taskHistory.remove(HISTORY_DEPTH);
+            taskHistory.removeFirst();
         }
     }
 

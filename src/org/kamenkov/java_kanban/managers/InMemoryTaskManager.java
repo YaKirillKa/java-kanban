@@ -161,6 +161,11 @@ public class InMemoryTaskManager implements TaskManager {
         return epic == null ? null : epic.getSubtaskObjects();
     }
 
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
     /**
      * Returns {@link Epic} object by given {@link Subtask}.
      *
