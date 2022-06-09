@@ -33,9 +33,15 @@ public class Main {
         System.out.println("История просмотров: " + taskManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
         printAllTasks(taskManager);
         for (int i = 0; i < 14; i++) {
-            taskManager.getEpicObjectById(taskManager.createEpic(new EpicImpl("Тестовый эпик", "Описание тестового эпика")));
+            System.out.println(taskManager.getEpicObjectById(taskManager.createEpic(new EpicImpl("Тестовый эпик", "Описание тестового эпика"))).getId());
+            System.out.println("История просмотров: " + taskManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
         }
+        System.out.println("Эпик: " + taskManager.getEpicObjectById(1L));
+        System.out.println("История просмотров: " + taskManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
         taskManager.removeEpic(1L);
+        System.out.println("Удалили первый эпик");
+        taskManager.removeEpic(10L);
+        System.out.println("Удалили десятый эпик");
         System.out.println("История просмотров: " + taskManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
         System.out.println("Размер истории: " + taskManager.getHistory().size());
         printAllTasks(taskManager);
@@ -46,5 +52,6 @@ public class Main {
         System.out.println("Задачи: " + taskManager.getAllTaskObjects());
         System.out.println("Эпики: " + taskManager.getAllEpicObjects());
         System.out.println("Подзадачи: " + taskManager.getAllSubtaskObjects());
+        System.out.println("=========================================");
     }
 }

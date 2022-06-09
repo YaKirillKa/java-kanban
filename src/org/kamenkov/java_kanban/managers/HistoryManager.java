@@ -14,6 +14,13 @@ public interface HistoryManager {
     void add(Task task);
 
     /**
+     * Removes {@link Task} from the history by given ID.
+     *
+     * @param id of the {@link Task} that should be removed.
+     */
+    void remove(Long id);
+
+    /**
      * Returns a {@link List} of {@link Task}s that have been viewed by users.
      *
      * @return {@link List} of {@link Task} or empty {@link List}

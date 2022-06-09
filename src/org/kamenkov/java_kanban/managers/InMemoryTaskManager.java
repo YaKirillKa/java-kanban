@@ -78,18 +78,27 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTaskObjects() {
+        for (Long id : tasks.keySet()) {
+            historyManager.remove(id);
+        }
         tasks.clear();
     }
 
     @Override
     public void removeAllEpicObjects() {
         removeAllSubtaskObjects();
+        for (Long id : epics.keySet()) {
+            historyManager.remove(id);
+        }
         epics.clear();
     }
 
     @Override
     public void removeAllSubtaskObjects() {
         Set<Long> parentIds = subtasks.values().stream().map(Subtask::getParentId).collect(Collectors.toSet());
+        for (Long id : subtasks.keySet()) {
+            historyManager.remove(id);
+        }
         subtasks.clear();
         for (Long id : parentIds) {
             getEpicObjectById(id).recalculateStatus();
@@ -220,6 +229,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @param map from which map values should be removed.
      */
     private <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
+        historyManager.remove(id);
         map.remove(id);
     }
 }
