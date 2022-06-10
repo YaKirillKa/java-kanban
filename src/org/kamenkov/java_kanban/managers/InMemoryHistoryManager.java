@@ -66,10 +66,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node newNode = new Node(oldTail, task, null);
         nodeMap.put(task.getId(), newNode);
         last = newNode;
-        if (oldTail == null)
+        if (oldTail == null) {
             first = newNode;
-        else
+        } else {
             oldTail.next = newNode;
+        }
     }
 
     /**
@@ -85,23 +86,19 @@ public class InMemoryHistoryManager implements HistoryManager {
             first = next;
         } else {
             prev.next = next;
-            node.prev = null;
         }
 
         if (next == null) {
             last = prev;
         } else {
             next.prev = next;
-            node.next = null;
         }
-
-        node.data = null;
     }
 
     private static class Node {
-        public Task data;
-        public Node next;
-        public Node prev;
+        Task data;
+        Node next;
+        Node prev;
 
         public Node(Node prev, Task data, Node next) {
             this.data = data;
