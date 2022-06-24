@@ -3,22 +3,21 @@ package org.kamenkov.java_kanban.managers;
 public class InMemoryIdManager implements IdManager {
 
     private Long lastId;
-    private static final InMemoryIdManager IN_MEMORY_ID_MANAGER = new InMemoryIdManager();
 
     /**
-     * Private constructor to avoid duplicating of the manager.
+     * Constructor without parameters.
      */
-    private InMemoryIdManager() {
+    InMemoryIdManager() {
         lastId = 0L;
     }
 
     /**
-     * Returns instance of {@link InMemoryIdManager}.
+     * Constructor for initializing the manager with the last ID.
      *
-     * @return {@link InMemoryIdManager}.
+     * @param lastId the last ID used.
      */
-    public static IdManager getInstance() {
-        return IN_MEMORY_ID_MANAGER;
+    InMemoryIdManager(Long lastId) {
+        this.lastId = lastId;
     }
 
     /**
@@ -30,4 +29,5 @@ public class InMemoryIdManager implements IdManager {
     public Long getLastId() {
         return ++lastId;
     }
+
 }

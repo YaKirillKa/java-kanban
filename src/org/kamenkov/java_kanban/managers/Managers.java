@@ -5,7 +5,7 @@ public class Managers {
     private Managers() {}
 
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        return new FileBackedTasksManager();
     }
 
     public static HistoryManager getDefaultHistoryManager() {
@@ -13,6 +13,6 @@ public class Managers {
     }
 
     public static IdManager getDefaultIdManager() {
-        return InMemoryIdManager.getInstance();
+        return new InMemoryIdManager();
     }
 }

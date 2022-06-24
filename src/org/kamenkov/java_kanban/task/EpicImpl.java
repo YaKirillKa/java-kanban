@@ -4,6 +4,7 @@ import org.kamenkov.java_kanban.Status;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ public class EpicImpl extends TaskImpl implements Epic {
     /* Hides the superclass field to prohibit manual updates */
     private Status status;
     private final List<Subtask> subtasks;
+    private static final Type type = Type.EPIC;
 
     public EpicImpl(String summary, String description) {
         super(summary, description);
@@ -61,13 +63,7 @@ public class EpicImpl extends TaskImpl implements Epic {
 
     @Override
     public String toString() {
-        return "EpicImpl{" +
-                "id=" + getId() +
-                ", summary='" + getSummary() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status=" + getStatus() +
-                ", subtasks=" + subtasks +
-                '}';
+        return getId() + "," + type + "," + getSummary() + "," + getStatus() + "," + getDescription();
     }
 
     @Override
@@ -78,7 +74,7 @@ public class EpicImpl extends TaskImpl implements Epic {
 
         EpicImpl epic = (EpicImpl) o;
 
-        return subtasks != null ? subtasks.equals(epic.subtasks) : epic.subtasks == null;
+        return Objects.equals(subtasks, epic.subtasks);
     }
 
     @Override

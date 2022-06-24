@@ -3,6 +3,7 @@ package org.kamenkov.java_kanban.task;
 public class SubtaskImpl extends TaskImpl implements Subtask {
 
     private final Long parentId;
+    private static final Type type = Type.SUBTASK;
 
     public SubtaskImpl(String summary, String description, Long parentId) {
         super(summary, description);
@@ -16,13 +17,7 @@ public class SubtaskImpl extends TaskImpl implements Subtask {
 
     @Override
     public String toString() {
-        return "SubtaskImpl{" +
-                "id=" + getId() +
-                ", summary='" + getSummary() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status=" + getStatus() +
-                ", parentId=" + parentId +
-                '}';
+        return getId() + "," + type + "," + getSummary() + "," + getStatus() + "," + getDescription() + "," + getParentId();
     }
 
     @Override

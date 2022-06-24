@@ -16,12 +16,12 @@ public class InMemoryTaskManager implements TaskManager {
     private static final String ID_CANNOT_BE_NULL = "ID cannot be null";
 
     /* Managers */
-    private final IdManager idManager;
-    private final HistoryManager historyManager;
+    IdManager idManager;
+    HistoryManager historyManager;
     /* Different maps for different types */
-    private final Map<Long, Task> tasks;
-    private final Map<Long, Epic> epics;
-    private final Map<Long, Subtask> subtasks;
+    final Map<Long, Task> tasks;
+    final Map<Long, Epic> epics;
+    final Map<Long, Subtask> subtasks;
 
     public InMemoryTaskManager() {
         idManager = Managers.getDefaultIdManager();
@@ -185,7 +185,7 @@ public class InMemoryTaskManager implements TaskManager {
         return epics.get(subtask.getParentId());
     }
 
-    private <T extends Task> Long createTask(T taskObject, Map<Long, T> map) {
+    <T extends Task> Long createTask(T taskObject, Map<Long, T> map) {
         Objects.requireNonNull(map, MAP_CANNOT_BE_NULL);
         if (taskObject == null) {
             return null;
@@ -204,7 +204,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @param id         unique id of task.
      * @throws IllegalArgumentException if any of the arguments is null.
      */
-    private <T extends Task> void updateTask(T taskObject, Map<Long, T> map, Long id) {
+    <T extends Task> void updateTask(T taskObject, Map<Long, T> map, Long id) {
         Objects.requireNonNull(taskObject, OBJECT_CANNOT_BE_NULL);
         Objects.requireNonNull(map, MAP_CANNOT_BE_NULL);
         Objects.requireNonNull(id, ID_CANNOT_BE_NULL);
@@ -228,7 +228,7 @@ public class InMemoryTaskManager implements TaskManager {
      *
      * @param map from which map values should be removed.
      */
-    private <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
+    <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
         historyManager.remove(id);
         map.remove(id);
     }

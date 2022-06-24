@@ -8,11 +8,17 @@ public class TaskImpl implements Task {
     private String summary;
     private String description;
     private Status status;
+    private static final Type type = Type.TASK;
 
     public TaskImpl(String summary, String description) {
         this.summary = summary;
         this.description = description;
         this.status = Status.NEW;
+    }
+
+    @Override
+    public Type getType() {
+        return type;
     }
 
     @Override
@@ -57,12 +63,7 @@ public class TaskImpl implements Task {
 
     @Override
     public String toString() {
-        return "TaskImpl{" +
-                "id=" + id +
-                ", summary='" + summary + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
+        return id + "," + type + "," + summary + "," + status + "," + description;
     }
 
     @Override

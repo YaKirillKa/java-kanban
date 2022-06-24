@@ -5,6 +5,13 @@ import org.kamenkov.java_kanban.Status;
 public interface Task {
 
     /**
+     * Returns Type of {@link Task}.
+     *
+     * @return type.
+     */
+    Type getType();
+
+    /**
      * Returns summary of {@link Task}.
      *
      * @return summary.
