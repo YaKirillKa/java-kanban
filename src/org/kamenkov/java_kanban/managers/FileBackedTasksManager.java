@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static final String DEFAULT_FILE_PATH = "backup.csv";
     private static final String HEADER = "id,type,name,status,description,epic\n";
@@ -120,8 +120,47 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             sb.append(getHistory().stream().map(Task::getId).map(String::valueOf).collect(Collectors.joining(",")));
             writer.write(sb.toString());
         } catch (IOException e) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException(e.getMessage());
         }
+    }
+
+    @Override
+    public Task getTaskObjectById(Long id) {
+        final Task task = super.getTaskObjectById(id);
+        save();
+        return task;
+    }
+
+    @Override
+    public Epic getEpicObjectById(Long id) {
+        final Epic epic = super.getEpicObjectById(id);
+        save();
+        return epic;
+    }
+
+    @Override
+    public Subtask getSubtaskObject(Long id) {
+        final Subtask subtask = super.getSubtaskObject(id);
+        save();
+        return subtask;
+    }
+
+    @Override
+    public void removeAllTaskObjects() {
+        super.removeAllTaskObjects();
+        save();
+    }
+
+    @Override
+    public void removeAllEpicObjects() {
+        super.removeAllEpicObjects();
+        save();
+    }
+
+    @Override
+    public void removeAllSubtaskObjects() {
+        super.removeAllSubtaskObjects();
+        save();
     }
 
     @Override
