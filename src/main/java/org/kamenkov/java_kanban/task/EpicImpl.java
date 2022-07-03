@@ -49,7 +49,7 @@ public class EpicImpl extends TaskImpl implements Epic {
 
     @Override
     public void recalculateStatus() {
-        if (subtasks == null) {
+        if (subtasks.isEmpty()) {
             status = Status.NEW;
             return;
         }
