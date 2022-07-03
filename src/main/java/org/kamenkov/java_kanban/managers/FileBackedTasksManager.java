@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static final String DEFAULT_FILE_PATH = "backup.csv";
-    private static final String HEADER = "id,type,name,status,description,epic\n";
+    private static final String HEADER = "id,type,name,status,description, start_date, duration, end_date, epic\n";
 
     /**
      * Returns new {@link FileBackedTasksManager} with initialized fields and all tasks.

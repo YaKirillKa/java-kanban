@@ -17,7 +17,8 @@ public class SubtaskImpl extends TaskImpl implements Subtask {
 
     @Override
     public String toString() {
-        return getId() + "," + type + "," + getSummary() + "," + getStatus() + "," + getDescription() + "," + getParentId();
+        return getId() + "," + type + "," + getSummary() + "," + getStatus() + "," + getDescription()
+                + "," + getStartDate() + "," + getDurationInMinutes() + "," + getEndDate() + "," + getParentId();
     }
 
     @Override

@@ -9,7 +9,7 @@ public class Managers {
     }
 
     public static HistoryManager getDefaultHistoryManager() {
-        return InMemoryHistoryManager.getInstance();
+        return new InMemoryHistoryManager();
     }
 
     public static IdManager getDefaultIdManager() {

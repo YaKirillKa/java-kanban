@@ -2,12 +2,18 @@ package org.kamenkov.java_kanban.task;
 
 import org.kamenkov.java_kanban.Status;
 
+import java.time.Duration;
+import java.time.LocalDate;
+
 public class TaskImpl implements Task {
 
     private Long id;
     private String summary;
     private String description;
     private Status status;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    long durationInMinutes;
     private static final Type type = Type.TASK;
 
     public TaskImpl(String summary, String description) {
@@ -62,8 +68,36 @@ public class TaskImpl implements Task {
     }
 
     @Override
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    @Override
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+        endDate = startDate.plus(Duration.ofMinutes(durationInMinutes));
+    }
+
+    @Override
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    @Override
+    public long getDurationInMinutes() {
+        return durationInMinutes;
+    }
+
+    @Override
+    public void setDurationInMinutes(long durationInMinutes) {
+        this.durationInMinutes = durationInMinutes;
+        endDate = startDate.plus(Duration.ofMinutes(durationInMinutes));
+    }
+
+    @Override
     public String toString() {
-        return id + "," + type + "," + summary + "," + status + "," + description;
+        return id + "," + type + "," + summary + "," + status + ","
+                + description + "," + startDate + "," + durationInMinutes + "," + endDate;
     }
 
     @Override

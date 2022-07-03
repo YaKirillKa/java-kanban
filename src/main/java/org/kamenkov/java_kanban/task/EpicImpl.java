@@ -63,7 +63,8 @@ public class EpicImpl extends TaskImpl implements Epic {
 
     @Override
     public String toString() {
-        return getId() + "," + type + "," + getSummary() + "," + getStatus() + "," + getDescription();
+        return getId() + "," + type + "," + getSummary() + "," + getStatus() + "," + getDescription() + ","
+                + getStartDate() + "," + getDurationInMinutes() + "," + getEndDate();
     }
 
     @Override

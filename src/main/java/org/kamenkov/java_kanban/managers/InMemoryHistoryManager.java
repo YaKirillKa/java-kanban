@@ -9,25 +9,9 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static final HistoryManager HISTORY_MANAGER = new InMemoryHistoryManager();
     private final Map<Long, Node> nodeMap = new HashMap<>();
     private Node first;
     private Node last;
-
-    /**
-     * Private constructor to avoid duplicating of the manager.
-     */
-    private InMemoryHistoryManager() {
-    }
-
-    /**
-     * Returns instance of {@link InMemoryHistoryManager}.
-     *
-     * @return {@link InMemoryHistoryManager}.
-     */
-    public static HistoryManager getInstance() {
-        return HISTORY_MANAGER;
-    }
 
     @Override
     public void add(Task task) {
