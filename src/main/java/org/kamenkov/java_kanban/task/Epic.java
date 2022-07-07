@@ -30,4 +30,9 @@ public interface Epic extends Task {
      */
     void recalculateStatus();
 
+    /**
+     * Changes dates of parent {@link Epic} based on its {@link Subtask}s.
+     */
+    void recalculateDates();
+
 }

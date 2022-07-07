@@ -2,6 +2,7 @@ package org.kamenkov.java_kanban.task;
 
 import org.kamenkov.java_kanban.Status;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,10 +11,11 @@ import java.util.stream.Collectors;
 
 public class EpicImpl extends TaskImpl implements Epic {
 
+    private static final Type type = Type.EPIC;
     /* Hides the superclass field to prohibit manual updates */
     private Status status;
     private final List<Subtask> subtasks;
-    private static final Type type = Type.EPIC;
+    private LocalDateTime endDate;
 
     public EpicImpl(String summary, String description) {
         super(summary, description);
@@ -31,11 +33,16 @@ public class EpicImpl extends TaskImpl implements Epic {
         return subtasks;
     }
 
+    private void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
     @Override
     public void addSubtask(Subtask subtask) {
         if (subtask != null) {
             subtasks.add(subtask);
             recalculateStatus();
+            recalculateDates();
         }
     }
 
@@ -44,6 +51,7 @@ public class EpicImpl extends TaskImpl implements Epic {
         if (subtask != null) {
             subtasks.remove(subtask);
             recalculateStatus();
+            recalculateDates();
         }
     }
 
@@ -59,6 +67,31 @@ public class EpicImpl extends TaskImpl implements Epic {
             return;
         }
         status = Status.IN_PROGRESS;
+    }
+
+    @Override
+    public void recalculateDates() {
+        if (subtasks.isEmpty()) {
+            return;
+        }
+        long duration = subtasks.get(0).getDurationInMinutes();
+        LocalDateTime startDate = subtasks.get(0).getStartDate();
+        LocalDateTime endDate = subtasks.get(0).getEndDate();
+        for (int i = 1; i < subtasks.size(); i++) {
+            final Subtask subtask = subtasks.get(i);
+            duration+= subtask.getDurationInMinutes();
+            final LocalDateTime subtaskStartDate = subtask.getStartDate();
+            if (subtaskStartDate != null && subtaskStartDate.isBefore(startDate)) {
+                startDate = subtaskStartDate;
+            }
+            final LocalDateTime subtaskEndDate = subtask.getEndDate();
+            if (subtaskEndDate != null && subtaskEndDate.isAfter(endDate)) {
+                endDate = subtaskEndDate;
+            }
+        }
+        setDurationInMinutes(duration);
+        setStartDate(startDate);
+        setEndDate(endDate);
     }
 
     @Override

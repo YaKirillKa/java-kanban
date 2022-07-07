@@ -2,7 +2,7 @@ package org.kamenkov.java_kanban.task;
 
 import org.kamenkov.java_kanban.Status;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface Task {
 
@@ -65,11 +65,11 @@ public interface Task {
      */
     void setId(Long id);
 
-    LocalDate getStartDate();
+    LocalDateTime getStartDate();
 
-    void setStartDate(LocalDate startDate);
+    void setStartDate(LocalDateTime startDate);
 
-    LocalDate getEndDate();
+    LocalDateTime getEndDate();
 
     long getDurationInMinutes();
 

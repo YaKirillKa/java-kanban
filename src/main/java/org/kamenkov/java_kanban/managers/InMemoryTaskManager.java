@@ -22,6 +22,7 @@ public class InMemoryTaskManager implements TaskManager {
     final Map<Long, Task> tasks;
     final Map<Long, Epic> epics;
     final Map<Long, Subtask> subtasks;
+    final Set<Task> prioritizedTasks = new TreeSet<>();
 
     public InMemoryTaskManager() {
         idManager = Managers.getDefaultIdManager();
@@ -102,6 +103,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.clear();
         for (Long id : parentIds) {
             getEpicObjectById(id).recalculateStatus();
+            getEpicObjectById(id).recalculateDates();
         }
     }
 
@@ -137,8 +139,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateSubtask(Subtask subtask, Long id) {
         Epic parentObject = getParentObject(subtask);
         Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
-        updateTask(subtask, subtasks, id);
         parentObject.recalculateStatus();
+        parentObject.recalculateDates();
+        updateTask(subtask, subtasks, id);
     }
 
     @Override
@@ -193,6 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
         final Long id = idManager.getLastId();
         taskObject.setId(id);
         map.put(id, taskObject);
+        prioritizedTasks.add(taskObject);
         return taskObject.getId();
     }
 
@@ -210,6 +214,7 @@ public class InMemoryTaskManager implements TaskManager {
         Objects.requireNonNull(id, ID_CANNOT_BE_NULL);
         if (map.containsKey(id)) {
             map.put(id, taskObject);
+            prioritizedTasks.add(taskObject);
         }
     }
 
