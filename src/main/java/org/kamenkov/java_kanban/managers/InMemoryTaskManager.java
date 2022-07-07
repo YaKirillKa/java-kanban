@@ -15,6 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     private static final String MAP_CANNOT_BE_NULL = "Map cannot be null";
     private static final String OBJECT_CANNOT_BE_NULL = "Object cannot be null";
     private static final String ID_CANNOT_BE_NULL = "ID cannot be null";
+    private static final String TIME_INTERSECTION_FOUND = "Time intersection found with task. ID: ";
 
     /* Managers */
     IdManager idManager;
@@ -110,6 +111,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Long createTask(Task task) {
+        final Optional<Task> intersectionTask = getFirstIntersection(task);
+        if (intersectionTask.isPresent()) {
+            throw new IllegalArgumentException(TIME_INTERSECTION_FOUND + intersectionTask.get().getId());
+        }
         return createTask(task, tasks);
     }
 
@@ -122,12 +127,20 @@ public class InMemoryTaskManager implements TaskManager {
     public Long createSubtask(Subtask subtask) {
         Epic parentObject = getParentObject(subtask);
         Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
+        final Optional<Task> intersectionTask = getFirstIntersection(subtask);
+        if (intersectionTask.isPresent()) {
+            throw new IllegalArgumentException(TIME_INTERSECTION_FOUND + intersectionTask.get().getId());
+        }
         parentObject.addSubtask(subtask);
         return createTask(subtask, subtasks);
     }
 
     @Override
     public void updateTask(Task task, Long id) {
+        final Optional<Task> intersectionTask = getFirstIntersection(task);
+        if (intersectionTask.isPresent()) {
+            throw new IllegalArgumentException(TIME_INTERSECTION_FOUND + intersectionTask.get().getId());
+        }
         updateTask(task, tasks, id);
     }
 
@@ -140,6 +153,10 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateSubtask(Subtask subtask, Long id) {
         Epic parentObject = getParentObject(subtask);
         Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
+        final Optional<Task> intersectionTask = getFirstIntersection(subtask);
+        if (intersectionTask.isPresent()) {
+            throw new IllegalArgumentException(TIME_INTERSECTION_FOUND + intersectionTask.get().getId());
+        }
         parentObject.recalculateStatus();
         parentObject.recalculateDates();
         updateTask(subtask, subtasks, id);
@@ -245,18 +262,38 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     /**
+     * Checks whether the given {@link Task} intersects with other created {@link Task}s.
+     *
+     * @param task new {@link Task} which dates should be checked.
+     * @return {@link Optional} with the first found {@link Task} that intersects with or an empty {@link Optional}.
+     */
+    private Optional<Task> getFirstIntersection(Task task) {
+        if (task.getStartDate() == null) {
+            return Optional.empty();
+        }
+        return prioritizedTasks.stream()
+                .filter(t -> !t.equals(task))
+                .filter(t -> !(t instanceof Epic))
+                .filter(t -> t.getStartDate() != null)
+                .filter(t -> t.getEndDate().isAfter(task.getStartDate())
+                        && t.getStartDate().isBefore(task.getEndDate()))
+                .findFirst();
+    }
+
+    /**
      * Comparator to compare tasks by their start date.
      */
     private static class StartDateComparator implements Comparator<Task> {
         @Override
         public int compare(Task o1, Task o2) {
-            if (o1.equals(o2)) {
-                return 0;
-            }
             LocalDateTime o1sd = o1.getStartDate();
             LocalDateTime o2sd = o2.getStartDate();
-            if (o1sd != null && o2sd != null) {
-                return o1sd.compareTo(o2sd);
+            if (o1sd != null) {
+                if (o2sd == null) {
+                    return -1;
+                } else {
+                    return o1sd.compareTo(o2sd);
+                }
             }
             return 1;
         }
