@@ -4,6 +4,7 @@ import org.kamenkov.java_kanban.task.Epic;
 import org.kamenkov.java_kanban.task.Subtask;
 import org.kamenkov.java_kanban.task.Task;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
     final Map<Long, Task> tasks;
     final Map<Long, Epic> epics;
     final Map<Long, Subtask> subtasks;
-    final Set<Task> prioritizedTasks = new TreeSet<>();
+    final Set<Task> prioritizedTasks = new TreeSet<>(new StartDateComparator());
 
     public InMemoryTaskManager() {
         idManager = Managers.getDefaultIdManager();
@@ -174,6 +175,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public Set<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+    }
+
+    @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
@@ -236,5 +242,23 @@ public class InMemoryTaskManager implements TaskManager {
     <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
         historyManager.remove(id);
         map.remove(id);
+    }
+
+    /**
+     * Comparator to compare tasks by their start date.
+     */
+    private static class StartDateComparator implements Comparator<Task> {
+        @Override
+        public int compare(Task o1, Task o2) {
+            if (o1.equals(o2)) {
+                return 0;
+            }
+            LocalDateTime o1sd = o1.getStartDate();
+            LocalDateTime o2sd = o2.getStartDate();
+            if (o1sd != null && o2sd != null) {
+                return o1sd.compareTo(o2sd);
+            }
+            return 1;
+        }
     }
 }

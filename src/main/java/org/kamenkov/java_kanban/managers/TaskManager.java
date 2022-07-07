@@ -5,6 +5,7 @@ import org.kamenkov.java_kanban.task.Subtask;
 import org.kamenkov.java_kanban.task.Task;
 
 import java.util.Collection;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -52,6 +53,13 @@ public interface TaskManager {
      * @return {@link Subtask}.
      */
     Subtask getSubtaskObject(Long id);
+
+    /**
+     * Returns all tasks ordered by their start dates.
+     *
+     * @return {@link Set} with ordered tasks.
+     */
+    Set<Task> getPrioritizedTasks();
 
     /**
      * Removes all {@link Task} from memory.
