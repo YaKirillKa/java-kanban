@@ -70,7 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskObject(Long id) {
+    public Subtask getSubtaskObjectById(Long id) {
         Subtask task = subtasks.get(id);
         if (task == null) {
             return null;
@@ -179,7 +179,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeSubtask(Long id) {
-        Subtask subtask = getSubtaskObject(id);
+        Subtask subtask = getSubtaskObjectById(id);
         Epic parentObject = getParentObject(subtask);
         Objects.requireNonNull(parentObject, PARENT_CANNOT_BE_NULL);
         parentObject.removeSubtask(subtask);

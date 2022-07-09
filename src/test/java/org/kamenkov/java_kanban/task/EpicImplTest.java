@@ -51,10 +51,10 @@ class EpicImplTest {
 
     private Subtask createSubtaskWithStatus(Status status) {
         Long id = taskManager.createSubtask(new SubtaskImpl("summary", "description", epic.getId()));
-        Subtask subtask = taskManager.getSubtaskObject(id);
+        Subtask subtask = taskManager.getSubtaskObjectById(id);
         subtask.setStatus(status);
         taskManager.updateSubtask(subtask, subtask.getId());
-        return taskManager.getSubtaskObject(id);
+        return taskManager.getSubtaskObjectById(id);
     }
 
 }

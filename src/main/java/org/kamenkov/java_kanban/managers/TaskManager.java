@@ -52,7 +52,7 @@ public interface TaskManager {
      * @param id unique id of subtask.
      * @return {@link Subtask}.
      */
-    Subtask getSubtaskObject(Long id);
+    Subtask getSubtaskObjectById(Long id);
 
     /**
      * Returns all tasks ordered by their start dates.
