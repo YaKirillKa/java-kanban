@@ -6,13 +6,14 @@ import org.kamenkov.java_kanban.task.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static final String DEFAULT_FILE_PATH = "backup.csv";
-    private static final String HEADER = "id,type,name,status,description, start_date, duration, end_date, epic\n";
+    private static final String HEADER = "id,type,name,status,description,start_date,duration,end_date,epic\n";
 
     /**
      * Returns new {@link FileBackedTasksManager} with initialized fields and all tasks.
@@ -43,7 +44,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 allTasks.put(task.getId(), task);
             }
             fileBackedTasksManager.idManager = new InMemoryIdManager(lastId);
-            fileBackedTasksManager.fillHistoryManagerFromString(bf.readLine(), allTasks);
+            final String historyLine = bf.readLine();
+            if (historyLine != null) {
+                fileBackedTasksManager.fillHistoryManagerFromString(historyLine, allTasks);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,9 +67,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String summary = values[2];
         Status status = Status.valueOf(values[3]);
         String description = values[4];
+        String startDateString = values[5];
+        LocalDateTime startDate = "null".equals(startDateString) ? null : LocalDateTime.parse(startDateString);
+        long duration = Long.parseLong(values[6]);
         Long parentId = null;
         if (type == Type.SUBTASK) {
-            parentId = Long.parseLong(values[5]);
+            parentId = Long.parseLong(values[8]);
         }
         Task task = null;
         switch (type) {
@@ -82,6 +89,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Objects.requireNonNull(task);
         task.setId(id);
         task.setStatus(status);
+        task.setStartDate(startDate);
+        task.setDurationInMinutes(duration);
         return task;
     }
 
@@ -101,8 +110,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     /**
      * Writes all tasks and history to file.
      */
-    public void save() {
-        File file = new File(DEFAULT_FILE_PATH);
+    public void save(File file) {
+        if (file == null) {
+            file = new File(DEFAULT_FILE_PATH);
+        }
         try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             if (!file.exists()) {
                 file.createNewFile();
@@ -127,58 +138,58 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public Task getTaskObjectById(Long id) {
         final Task task = super.getTaskObjectById(id);
-        save();
+        save(null);
         return task;
     }
 
     @Override
     public Epic getEpicObjectById(Long id) {
         final Epic epic = super.getEpicObjectById(id);
-        save();
+        save(null);
         return epic;
     }
 
     @Override
     public Subtask getSubtaskObjectById(Long id) {
         final Subtask subtask = super.getSubtaskObjectById(id);
-        save();
+        save(null);
         return subtask;
     }
 
     @Override
     public void removeAllTaskObjects() {
         super.removeAllTaskObjects();
-        save();
+        save(null);
     }
 
     @Override
     public void removeAllEpicObjects() {
         super.removeAllEpicObjects();
-        save();
+        save(null);
     }
 
     @Override
     public void removeAllSubtaskObjects() {
         super.removeAllSubtaskObjects();
-        save();
+        save(null);
     }
 
     @Override
     <T extends Task> Long createTask(T taskObject, Map<Long, T> map) {
         final Long task = super.createTask(taskObject, map);
-        save();
+        save(null);
         return task;
     }
 
     @Override
     <T extends Task> void updateTask(T taskObject, Map<Long, T> map, Long id) {
         super.updateTask(taskObject, map, id);
-        save();
+        save(null);
     }
 
     @Override
     <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
         super.removeEntryFromMap(map, id);
-        save();
+        save(null);
     }
 }

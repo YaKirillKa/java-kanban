@@ -448,4 +448,16 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void getHistoryIfEmpty() {
         assertTrue(taskManager.getHistory().isEmpty());
     }
+
+    @Test
+    void testIntersection() {
+        Task task1 = new TaskImpl("Summary1", "Description1");
+        task1.setStartDate(LocalDateTime.of(2022, 1, 1, 10, 0));
+        task1.setDurationInMinutes(50);
+        Task task2 = new TaskImpl("Summary2", "Description2");
+        task2.setStartDate(LocalDateTime.of(2022, 1, 1, 10, 0));
+        task2.setDurationInMinutes(50);
+        taskManager.createTask(task1);
+        assertThrows(IllegalArgumentException.class, () -> taskManager.createTask(task2));
+    }
 }
