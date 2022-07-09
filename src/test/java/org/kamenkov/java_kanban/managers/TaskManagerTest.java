@@ -29,6 +29,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void getAllTaskObjectsIfEmpty() {
+        assertTrue(taskManager.getAllTaskObjects().isEmpty());
+    }
+
+    @Test
     void getAllEpicObjects() {
         Epic epic1 = new EpicImpl("Summary1", "Description1");
         Epic epic2 = new EpicImpl("Summary2", "Description2");
@@ -41,6 +46,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertFalse(savedEpics.isEmpty(), "Epics are not returned.");
         assertEquals(3, savedEpics.size(), "Wrong amount of epics.");
         assertEquals(epicList, savedEpics, "Epics are not equals.");
+    }
+
+    @Test
+    void getAllEpicObjectsIfEmpty() {
+        assertTrue(taskManager.getAllEpicObjects().isEmpty());
     }
 
     @Test
@@ -61,6 +71,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void getAllSubtaskObjectsIfEmpty() {
+        assertTrue(taskManager.getAllSubtaskObjects().isEmpty());
+    }
+
+    @Test
     void getTaskObjectById() {
         Task task = new TaskImpl("Summary", "Description");
         final Long taskId = taskManager.createTask(task);
@@ -68,6 +83,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(savedTask, "Task not found.");
         assertEquals(task, savedTask, "Tasks are not equal.");
+    }
+
+    @Test
+    void getTaskObjectByIdIfEmpty() {
+        assertNull(taskManager.getTaskObjectById(1L));
+        assertNull(taskManager.getTaskObjectById(null));
     }
 
     @Test
@@ -81,6 +102,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void getEpicObjectByIdIfEmpty() {
+        assertNull(taskManager.getEpicObjectById(1L));
+        assertNull(taskManager.getEpicObjectById(null));
+    }
+
+    @Test
     void getSubtaskObject() {
         Epic epic = new EpicImpl("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
@@ -90,7 +117,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(savedSubtask, "Subtask are not returned.");
         assertEquals(subtask, savedSubtask, "Returned subtask is not equal.");
+    }
 
+    @Test
+    void getSubtaskObjectByIdIfEmpty() {
+        assertNull(taskManager.getSubtaskObjectById(1L));
+        assertNull(taskManager.getSubtaskObjectById(null));
     }
 
     @Test
@@ -116,6 +148,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(orderedTasks, prioritizedTasks, "Tasks are not equals.");
     }
 
+    @Test
+    void getPrioritizedTasksIfEmpty() {
+        assertTrue(taskManager.getPrioritizedTasks().isEmpty());
+    }
     @Test
     void removeAllTaskObjects() {
         Task task1 = new TaskImpl("Summary1", "Description1");
@@ -185,6 +221,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void createTaskIfTaskIsNull() {
+        assertThrows(NullPointerException.class, () -> taskManager.createTask(null));
+    }
+
+    @Test
     void createEpic() {
         Epic epic = new EpicImpl("Test createEpic", "Test createEpic description");
         final Long epicId = taskManager.createEpic(epic);
@@ -198,6 +239,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(epics, "Epics are not returned.");
         assertEquals(1, epics.size(), "Wrong amount of epics.");
         assertEquals(epic, epics.iterator().next(), "Returned epic is not equal.");
+    }
+
+    @Test
+    void createEpicIfEpicIsNull() {
+        assertNull(taskManager.createEpic(null));
     }
 
     @Test
@@ -219,6 +265,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void createSubtaskIfSubtaskIsNull() {
+        assertThrows(NullPointerException.class, () -> taskManager.createSubtask(null));
+    }
+
+    @Test
     void updateTask() {
         Task createdTask = new TaskImpl("Summary", "Description");
         final Long createdTaskId = taskManager.createTask(createdTask);
@@ -232,6 +283,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void updateTaskIfNull() {
+        Task createdTask = new TaskImpl("Summary", "Description");
+        final Long createdTaskId = taskManager.createTask(createdTask);
+        assertThrows(NullPointerException.class, () -> taskManager.updateTask(null, createdTaskId));
+    }
+
+    @Test
     void updateEpic() {
         Epic createdEpic = new EpicImpl("Summary", "Description");
         final Long createdEpicId = taskManager.createEpic(createdEpic);
@@ -242,6 +300,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
         final Epic savedEpic = taskManager.getEpicObjectById(createdEpicId);
         assertNotEquals(createdEpic, savedEpic);
         assertEquals(updatedEpic, savedEpic);
+    }
+
+    @Test
+    void updateEpicIfNull() {
+        Epic createdEpic = new EpicImpl("Summary", "Description");
+        final Long createdEpicId = taskManager.createEpic(createdEpic);
+        assertThrows(NullPointerException.class, () -> taskManager.updateEpic(null, createdEpicId));
     }
 
     @Test
@@ -260,6 +325,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void updateSubtaskIfNull() {
+        Epic createdEpic = new EpicImpl("Summary", "Description");
+        final Long createdEpicId = taskManager.createEpic(createdEpic);
+        Subtask createdSubtask = new SubtaskImpl("Summary", "Description", createdEpicId);
+        final Long createdSubtaskId = taskManager.createSubtask(createdSubtask);
+        assertThrows(NullPointerException.class, () -> taskManager.updateSubtask(null, createdSubtaskId));
+    }
+
+    @Test
     void removeTask() {
         Task task1 = new TaskImpl("Summary1", "Description1");
         Task task2 = new TaskImpl("Summary2", "Description2");
@@ -275,6 +349,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void removeTaskIfEmpty() {
+        taskManager.removeTask(1L);
+        taskManager.removeTask(null);
+    }
+
+    @Test
     void removeEpic() {
         Epic epic1 = new EpicImpl("Summary1", "Description1");
         Epic epic2 = new EpicImpl("Summary2", "Description2");
@@ -283,10 +363,20 @@ abstract class TaskManagerTest<T extends TaskManager> {
         for (Epic epic : epicList) {
             taskManager.createEpic(epic);
         }
+        Subtask subtask = new SubtaskImpl("Summary", "Description", 1L);
+        taskManager.createSubtask(subtask);
         assertEquals(3, taskManager.getAllEpicObjects().size());
+        assertEquals(1, taskManager.getAllSubtaskObjects().size());
         taskManager.removeEpic(1L);
         assertEquals(2, taskManager.getAllEpicObjects().size());
+        assertTrue(taskManager.getAllSubtaskObjects().isEmpty());
         assertNull(taskManager.getEpicObjectById(1L));
+    }
+
+    @Test
+    void removeEpicIfEmpty() {
+        assertThrows(NullPointerException.class, () -> taskManager.removeEpic(1L));
+        assertThrows(NullPointerException.class, () -> taskManager.removeEpic(null));
     }
 
     @Test
@@ -307,6 +397,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void removeSubtaskIfEmpty() {
+        assertThrows(NullPointerException.class, () -> taskManager.removeSubtask(1L));
+        assertThrows(NullPointerException.class, () -> taskManager.removeSubtask(null));
+    }
+
+    @Test
     void getSubtaskObjectsByParent() {
         Epic epic = new EpicImpl("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
@@ -321,6 +417,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
         List<Subtask> savedSubtasks = new ArrayList<>(taskManager.getSubtaskObjectsByParent(savedEpic));
         assertFalse(savedSubtasks.isEmpty());
         assertEquals(subtaskList, savedSubtasks);
+    }
+
+    @Test
+    void getSubtaskObjectsByParentIfParentIsNull() {
+        assertNull(taskManager.getSubtaskObjectsByParent(null));
     }
 
     @Test
@@ -341,5 +442,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         final Collection<Task> history = taskManager.getHistory();
         assertFalse(history.isEmpty());
         assertEquals(historyTasks, new ArrayList<>(history));
+    }
+
+    @Test
+    void getHistoryIfEmpty() {
+        assertTrue(taskManager.getHistory().isEmpty());
     }
 }

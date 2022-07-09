@@ -111,6 +111,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Long createTask(Task task) {
+        Objects.requireNonNull(task, OBJECT_CANNOT_BE_NULL);
         final Optional<Task> intersectionTask = getFirstIntersection(task);
         if (intersectionTask.isPresent()) {
             throw new IllegalArgumentException(TIME_INTERSECTION_FOUND + intersectionTask.get().getId());
