@@ -164,8 +164,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         List<Task> savedTasks = new ArrayList<>(taskManager.getAllTaskObjects());
         assertFalse(savedTasks.isEmpty(), "Tasks are not returned.");
         assertEquals(3, savedTasks.size(), "Wrong amount of tasks.");
+        assertEquals(3, taskManager.getPrioritizedTasks().size(), "Wrong amount of tasks.");
         taskManager.removeAllTaskObjects();
         assertTrue(taskManager.getAllTaskObjects().isEmpty());
+        assertTrue(taskManager.getPrioritizedTasks().isEmpty());
     }
 
     @Test
@@ -177,12 +179,16 @@ abstract class TaskManagerTest<T extends TaskManager> {
         for (Epic epic : epicList) {
             taskManager.createEpic(epic);
         }
+        Subtask subtask1 = new SubtaskImpl("Summary4", "Description4", 1L);
+        taskManager.createSubtask(subtask1);
         List<Epic> savedEpics = new ArrayList<>(taskManager.getAllEpicObjects());
         assertFalse(savedEpics.isEmpty(), "Epics are not returned.");
         assertEquals(3, savedEpics.size(), "Wrong amount of epics.");
+        assertEquals(4, taskManager.getPrioritizedTasks().size(), "Wrong amount of tasks.");
         taskManager.removeAllEpicObjects();
         assertTrue(taskManager.getAllEpicObjects().isEmpty());
         assertTrue(taskManager.getAllSubtaskObjects().isEmpty());
+        assertTrue(taskManager.getPrioritizedTasks().isEmpty());
     }
 
     @Test
@@ -199,8 +205,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         List<Subtask> savedSubtasks = new ArrayList<>(taskManager.getAllSubtaskObjects());
         assertFalse(savedSubtasks.isEmpty(), "Subtasks are not returned.");
         assertEquals(3, savedSubtasks.size(), "Wrong amount of subtasks.");
+        assertEquals(4, taskManager.getPrioritizedTasks().size(), "Wrong amount of tasks.");
         taskManager.removeAllSubtaskObjects();
         assertTrue(taskManager.getAllSubtaskObjects().isEmpty());
+        assertEquals(1, taskManager.getPrioritizedTasks().size(), "Wrong amount of tasks.");
 
     }
 

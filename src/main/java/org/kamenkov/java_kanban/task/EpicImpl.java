@@ -72,7 +72,7 @@ public class EpicImpl extends TaskImpl implements Epic {
         LocalDateTime endDateToUpdate = subtasks.get(0).getEndDate();
         for (int i = 1; i < subtasks.size(); i++) {
             final Subtask subtask = subtasks.get(i);
-            duration+= subtask.getDurationInMinutes();
+            duration += subtask.getDurationInMinutes();
             final LocalDateTime subtaskStartDate = subtask.getStartDate();
             if (subtaskStartDate != null && subtaskStartDate.isBefore(startDateToUpdate)) {
                 startDateToUpdate = subtaskStartDate;

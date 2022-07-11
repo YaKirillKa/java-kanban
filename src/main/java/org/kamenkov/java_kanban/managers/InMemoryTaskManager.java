@@ -81,8 +81,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTaskObjects() {
-        for (Long id : tasks.keySet()) {
-            historyManager.remove(id);
+        for (Map.Entry<Long, Task> entry : tasks.entrySet()) {
+            historyManager.remove(entry.getKey());
+            prioritizedTasks.removeIf(t ->  t.equals(entry.getValue()));
         }
         tasks.clear();
     }
@@ -90,8 +91,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAllEpicObjects() {
         removeAllSubtaskObjects();
-        for (Long id : epics.keySet()) {
-            historyManager.remove(id);
+        for (Map.Entry<Long, Epic> entry : epics.entrySet()) {
+            historyManager.remove(entry.getKey());
+            prioritizedTasks.removeIf(t ->  t.equals(entry.getValue()));
         }
         epics.clear();
     }
@@ -99,8 +101,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAllSubtaskObjects() {
         Set<Long> parentIds = subtasks.values().stream().map(Subtask::getParentId).collect(Collectors.toSet());
-        for (Long id : subtasks.keySet()) {
-            historyManager.remove(id);
+        for (Map.Entry<Long, Subtask> entry : subtasks.entrySet()) {
+            historyManager.remove(entry.getKey());
+            prioritizedTasks.removeIf(t ->  t.equals(entry.getValue()));
         }
         subtasks.clear();
         for (Long id : parentIds) {
@@ -259,6 +262,7 @@ public class InMemoryTaskManager implements TaskManager {
      */
     <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
         historyManager.remove(id);
+        prioritizedTasks.removeIf(t ->  t.equals(map.get(id)));
         map.remove(id);
     }
 
@@ -289,12 +293,8 @@ public class InMemoryTaskManager implements TaskManager {
         public int compare(Task o1, Task o2) {
             LocalDateTime o1sd = o1.getStartDate();
             LocalDateTime o2sd = o2.getStartDate();
-            if (o1sd != null) {
-                if (o2sd == null) {
-                    return -1;
-                } else {
-                    return o1sd.compareTo(o2sd);
-                }
+            if (o1sd != null && o2sd != null && !o1sd.equals(o2sd)) {
+                return o1sd.compareTo(o2sd);
             }
             return 1;
         }

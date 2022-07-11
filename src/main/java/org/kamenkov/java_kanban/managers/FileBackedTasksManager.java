@@ -38,6 +38,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     fileBackedTasksManager.epics.put(task.getId(), (Epic) task);
                 } else if (task instanceof Subtask) {
                     fileBackedTasksManager.subtasks.put(task.getId(), (Subtask) task);
+                    Subtask subtask = fileBackedTasksManager.getSubtaskObjectById(task.getId());
+                    Epic parent = fileBackedTasksManager.getEpicObjectById(subtask.getParentId());
+                    parent.addSubtask(subtask);
                 } else {
                     fileBackedTasksManager.tasks.put(task.getId(), task);
                 }
@@ -46,6 +49,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             fileBackedTasksManager.idManager = new InMemoryIdManager(lastId);
             final String historyLine = bf.readLine();
             if (historyLine != null) {
+                fileBackedTasksManager.historyManager = new InMemoryHistoryManager();
                 fileBackedTasksManager.fillHistoryManagerFromString(historyLine, allTasks);
             }
         } catch (IOException e) {
