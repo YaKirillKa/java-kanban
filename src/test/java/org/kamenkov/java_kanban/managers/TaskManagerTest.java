@@ -2,7 +2,9 @@ package org.kamenkov.java_kanban.managers;
 
 import org.junit.jupiter.api.Test;
 import org.kamenkov.java_kanban.Status;
-import org.kamenkov.java_kanban.task.*;
+import org.kamenkov.java_kanban.task.Epic;
+import org.kamenkov.java_kanban.task.Subtask;
+import org.kamenkov.java_kanban.task.Task;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -15,9 +17,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getAllTaskObjects() {
-        Task task1 = new TaskImpl("Summary1", "Description1");
-        Task task2 = new TaskImpl("Summary2", "Description2");
-        Task task3 = new TaskImpl("Summary3", "Description3");
+        Task task1 = new Task("Summary1", "Description1");
+        Task task2 = new Task("Summary2", "Description2");
+        Task task3 = new Task("Summary3", "Description3");
         final List<Task> taskList = List.of(task1, task2, task3);
         for (Task task : taskList) {
             taskManager.createTask(task);
@@ -35,9 +37,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getAllEpicObjects() {
-        Epic epic1 = new EpicImpl("Summary1", "Description1");
-        Epic epic2 = new EpicImpl("Summary2", "Description2");
-        Epic epic3 = new EpicImpl("Summary3", "Description3");
+        Epic epic1 = new Epic("Summary1", "Description1");
+        Epic epic2 = new Epic("Summary2", "Description2");
+        Epic epic3 = new Epic("Summary3", "Description3");
         final List<Epic> epicList = List.of(epic1, epic2, epic3);
         for (Epic epic : epicList) {
             taskManager.createEpic(epic);
@@ -55,11 +57,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getAllSubtaskObjects() {
-        Epic epic = new EpicImpl("Summary0", "Description0");
+        Epic epic = new Epic("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
-        Subtask subtask1 = new SubtaskImpl("Summary1", "Description1", parentId);
-        Subtask subtask2 = new SubtaskImpl("Summary2", "Description2", parentId);
-        Subtask subtask3 = new SubtaskImpl("Summary3", "Description3", parentId);
+        Subtask subtask1 = new Subtask("Summary1", "Description1", parentId);
+        Subtask subtask2 = new Subtask("Summary2", "Description2", parentId);
+        Subtask subtask3 = new Subtask("Summary3", "Description3", parentId);
         final List<Subtask> subtaskList = List.of(subtask1, subtask2, subtask3);
         for (Subtask subtask : subtaskList) {
             taskManager.createSubtask(subtask);
@@ -77,7 +79,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getTaskObjectById() {
-        Task task = new TaskImpl("Summary", "Description");
+        Task task = new Task("Summary", "Description");
         final Long taskId = taskManager.createTask(task);
         final Task savedTask = taskManager.getTaskObjectById(taskId);
 
@@ -93,7 +95,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getEpicObjectById() {
-        Epic epic = new EpicImpl("Summary", "Description");
+        Epic epic = new Epic("Summary", "Description");
         final Long epicId = taskManager.createEpic(epic);
         final Epic savedEpic = taskManager.getEpicObjectById(epicId);
 
@@ -109,9 +111,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getSubtaskObject() {
-        Epic epic = new EpicImpl("Summary0", "Description0");
+        Epic epic = new Epic("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
-        Subtask subtask = new SubtaskImpl("Summary1", "Description1", parentId);
+        Subtask subtask = new Subtask("Summary1", "Description1", parentId);
         Long subtaskId = taskManager.createSubtask(subtask);
         Subtask savedSubtask = taskManager.getSubtaskObjectById(subtaskId);
 
@@ -127,13 +129,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getPrioritizedTasks() {
-        Task task1 = new TaskImpl("Summary1", "Description1");
+        Task task1 = new Task("Summary1", "Description1");
         task1.setStartDate(LocalDateTime.of(2022, 1, 1, 10, 0));
         task1.setDurationInMinutes(30);
-        Task task2 = new TaskImpl("Summary2", "Description2");
+        Task task2 = new Task("Summary2", "Description2");
         task2.setStartDate(LocalDateTime.of(2022, 1, 2, 10, 0));
         task2.setDurationInMinutes(30);
-        Task task3 = new TaskImpl("Summary3", "Description3");
+        Task task3 = new Task("Summary3", "Description3");
         task3.setStartDate(LocalDateTime.of(2022, 1, 1, 9, 0));
         task3.setDurationInMinutes(30);
         final List<Task> taskList = List.of(task1, task2, task3);
@@ -142,7 +144,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         }
         TreeSet<Task> orderedTasks = new TreeSet<>(Comparator.comparing(Task::getStartDate));
         orderedTasks.addAll(taskList);
-        Set<Task> prioritizedTasks = taskManager.getPrioritizedTasks();
+        Collection<Task> prioritizedTasks = taskManager.getPrioritizedTasks();
         assertFalse(prioritizedTasks.isEmpty(), "Tasks are not returned.");
         assertEquals(3, prioritizedTasks.size(), "Wrong amount of tasks.");
         assertEquals(orderedTasks, prioritizedTasks, "Tasks are not equals.");
@@ -154,9 +156,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
     @Test
     void removeAllTaskObjects() {
-        Task task1 = new TaskImpl("Summary1", "Description1");
-        Task task2 = new TaskImpl("Summary2", "Description2");
-        Task task3 = new TaskImpl("Summary3", "Description3");
+        Task task1 = new Task("Summary1", "Description1");
+        Task task2 = new Task("Summary2", "Description2");
+        Task task3 = new Task("Summary3", "Description3");
         final List<Task> taskList = List.of(task1, task2, task3);
         for (Task task : taskList) {
             taskManager.createTask(task);
@@ -172,14 +174,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void removeAllEpicObjects() {
-        Epic epic1 = new EpicImpl("Summary1", "Description1");
-        Epic epic2 = new EpicImpl("Summary2", "Description2");
-        Epic epic3 = new EpicImpl("Summary3", "Description3");
+        Epic epic1 = new Epic("Summary1", "Description1");
+        Epic epic2 = new Epic("Summary2", "Description2");
+        Epic epic3 = new Epic("Summary3", "Description3");
         final List<Epic> epicList = List.of(epic1, epic2, epic3);
         for (Epic epic : epicList) {
             taskManager.createEpic(epic);
         }
-        Subtask subtask1 = new SubtaskImpl("Summary4", "Description4", 1L);
+        Subtask subtask1 = new Subtask("Summary4", "Description4", 1L);
         taskManager.createSubtask(subtask1);
         List<Epic> savedEpics = new ArrayList<>(taskManager.getAllEpicObjects());
         assertFalse(savedEpics.isEmpty(), "Epics are not returned.");
@@ -193,11 +195,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void removeAllSubtaskObjects() {
-        Epic epic = new EpicImpl("Summary0", "Description0");
+        Epic epic = new Epic("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
-        Subtask subtask1 = new SubtaskImpl("Summary1", "Description1", parentId);
-        Subtask subtask2 = new SubtaskImpl("Summary2", "Description2", parentId);
-        Subtask subtask3 = new SubtaskImpl("Summary3", "Description3", parentId);
+        Subtask subtask1 = new Subtask("Summary1", "Description1", parentId);
+        Subtask subtask2 = new Subtask("Summary2", "Description2", parentId);
+        Subtask subtask3 = new Subtask("Summary3", "Description3", parentId);
         final List<Subtask> subtaskList = List.of(subtask1, subtask2, subtask3);
         for (Subtask subtask : subtaskList) {
             taskManager.createSubtask(subtask);
@@ -214,7 +216,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createTask() {
-        Task task = new TaskImpl("Test createTask", "Test createTask description");
+        Task task = new Task("Test createTask", "Test createTask description");
         final Long taskId = taskManager.createTask(task);
         final Task savedTask = taskManager.getTaskObjectById(taskId);
 
@@ -235,7 +237,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createEpic() {
-        Epic epic = new EpicImpl("Test createEpic", "Test createEpic description");
+        Epic epic = new Epic("Test createEpic", "Test createEpic description");
         final Long epicId = taskManager.createEpic(epic);
         final Epic savedEpic = taskManager.getEpicObjectById(epicId);
 
@@ -256,9 +258,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createSubtask() {
-        Epic epic = new EpicImpl("Test createSubtask", "Test createSubtask description");
+        Epic epic = new Epic("Test createSubtask", "Test createSubtask description");
         final Long epicId = taskManager.createEpic(epic);
-        Subtask subtask = new SubtaskImpl("Test createSubtask", "Test createSubtask description", epicId);
+        Subtask subtask = new Subtask("Test createSubtask", "Test createSubtask description", epicId);
         final Long subtaskId = taskManager.createSubtask(subtask);
         final Subtask savedSubtask = taskManager.getSubtaskObjectById(subtaskId);
 
@@ -279,9 +281,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void updateTask() {
-        Task createdTask = new TaskImpl("Summary", "Description");
+        Task createdTask = new Task("Summary", "Description");
         final Long createdTaskId = taskManager.createTask(createdTask);
-        Task updatedTask = new TaskImpl("Summary1", "Description1");
+        Task updatedTask = new Task("Summary1", "Description1");
         updatedTask.setId(createdTaskId);
         updatedTask.setStatus(Status.DONE);
         taskManager.updateTask(updatedTask, createdTaskId);
@@ -292,16 +294,16 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void updateTaskIfNull() {
-        Task createdTask = new TaskImpl("Summary", "Description");
+        Task createdTask = new Task("Summary", "Description");
         final Long createdTaskId = taskManager.createTask(createdTask);
         assertThrows(NullPointerException.class, () -> taskManager.updateTask(null, createdTaskId));
     }
 
     @Test
     void updateEpic() {
-        Epic createdEpic = new EpicImpl("Summary", "Description");
+        Epic createdEpic = new Epic("Summary", "Description");
         final Long createdEpicId = taskManager.createEpic(createdEpic);
-        Epic updatedEpic = new EpicImpl("Summary1", "Description1");
+        Epic updatedEpic = new Epic("Summary1", "Description1");
         updatedEpic.setId(createdEpicId);
         updatedEpic.setDescription("Description2");
         taskManager.updateEpic(updatedEpic, createdEpicId);
@@ -312,18 +314,18 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void updateEpicIfNull() {
-        Epic createdEpic = new EpicImpl("Summary", "Description");
+        Epic createdEpic = new Epic("Summary", "Description");
         final Long createdEpicId = taskManager.createEpic(createdEpic);
         assertThrows(NullPointerException.class, () -> taskManager.updateEpic(null, createdEpicId));
     }
 
     @Test
     void updateSubtask() {
-        Epic createdEpic = new EpicImpl("Summary", "Description");
+        Epic createdEpic = new Epic("Summary", "Description");
         final Long createdEpicId = taskManager.createEpic(createdEpic);
-        Subtask createdSubtask = new SubtaskImpl("Summary", "Description", createdEpicId);
+        Subtask createdSubtask = new Subtask("Summary", "Description", createdEpicId);
         final Long createdSubtaskId = taskManager.createSubtask(createdSubtask);
-        Subtask updatedSubtask = new SubtaskImpl("Summary", "Description", createdEpicId);
+        Subtask updatedSubtask = new Subtask("Summary", "Description", createdEpicId);
         updatedSubtask.setId(createdSubtaskId);
         updatedSubtask.setDescription("Description1");
         taskManager.updateSubtask(updatedSubtask, createdSubtaskId);
@@ -334,18 +336,18 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void updateSubtaskIfNull() {
-        Epic createdEpic = new EpicImpl("Summary", "Description");
+        Epic createdEpic = new Epic("Summary", "Description");
         final Long createdEpicId = taskManager.createEpic(createdEpic);
-        Subtask createdSubtask = new SubtaskImpl("Summary", "Description", createdEpicId);
+        Subtask createdSubtask = new Subtask("Summary", "Description", createdEpicId);
         final Long createdSubtaskId = taskManager.createSubtask(createdSubtask);
         assertThrows(NullPointerException.class, () -> taskManager.updateSubtask(null, createdSubtaskId));
     }
 
     @Test
     void removeTask() {
-        Task task1 = new TaskImpl("Summary1", "Description1");
-        Task task2 = new TaskImpl("Summary2", "Description2");
-        Task task3 = new TaskImpl("Summary3", "Description3");
+        Task task1 = new Task("Summary1", "Description1");
+        Task task2 = new Task("Summary2", "Description2");
+        Task task3 = new Task("Summary3", "Description3");
         final List<Task> taskList = List.of(task1, task2, task3);
         for (Task task : taskList) {
             taskManager.createTask(task);
@@ -364,14 +366,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void removeEpic() {
-        Epic epic1 = new EpicImpl("Summary1", "Description1");
-        Epic epic2 = new EpicImpl("Summary2", "Description2");
-        Epic epic3 = new EpicImpl("Summary3", "Description3");
+        Epic epic1 = new Epic("Summary1", "Description1");
+        Epic epic2 = new Epic("Summary2", "Description2");
+        Epic epic3 = new Epic("Summary3", "Description3");
         final List<Epic> epicList = List.of(epic1, epic2, epic3);
         for (Epic epic : epicList) {
             taskManager.createEpic(epic);
         }
-        Subtask subtask = new SubtaskImpl("Summary", "Description", 1L);
+        Subtask subtask = new Subtask("Summary", "Description", 1L);
         taskManager.createSubtask(subtask);
         assertEquals(3, taskManager.getAllEpicObjects().size());
         assertEquals(1, taskManager.getAllSubtaskObjects().size());
@@ -389,11 +391,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void removeSubtask() {
-        Epic epic = new EpicImpl("Summary0", "Description0");
+        Epic epic = new Epic("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
-        Subtask subtask1 = new SubtaskImpl("Summary1", "Description1", parentId);
-        Subtask subtask2 = new SubtaskImpl("Summary2", "Description2", parentId);
-        Subtask subtask3 = new SubtaskImpl("Summary3", "Description3", parentId);
+        Subtask subtask1 = new Subtask("Summary1", "Description1", parentId);
+        Subtask subtask2 = new Subtask("Summary2", "Description2", parentId);
+        Subtask subtask3 = new Subtask("Summary3", "Description3", parentId);
         final List<Subtask> subtaskList = List.of(subtask1, subtask2, subtask3);
         for (Subtask subtask : subtaskList) {
             taskManager.createSubtask(subtask);
@@ -412,11 +414,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getSubtaskObjectsByParent() {
-        Epic epic = new EpicImpl("Summary0", "Description0");
+        Epic epic = new Epic("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
-        Subtask subtask1 = new SubtaskImpl("Summary1", "Description1", parentId);
-        Subtask subtask2 = new SubtaskImpl("Summary2", "Description2", parentId);
-        Subtask subtask3 = new SubtaskImpl("Summary3", "Description3", parentId);
+        Subtask subtask1 = new Subtask("Summary1", "Description1", parentId);
+        Subtask subtask2 = new Subtask("Summary2", "Description2", parentId);
+        Subtask subtask3 = new Subtask("Summary3", "Description3", parentId);
         final List<Subtask> subtaskList = List.of(subtask1, subtask2, subtask3);
         for (Subtask subtask : subtaskList) {
             taskManager.createSubtask(subtask);
@@ -434,9 +436,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getHistory() {
-        Task task1 = new TaskImpl("Summary1", "Description1");
-        Task task2 = new TaskImpl("Summary2", "Description2");
-        Task task3 = new TaskImpl("Summary3", "Description3");
+        Task task1 = new Task("Summary1", "Description1");
+        Task task2 = new Task("Summary2", "Description2");
+        Task task3 = new Task("Summary3", "Description3");
         final List<Task> taskList = List.of(task1, task2, task3);
         final List<Long> taskIds = new ArrayList<>();
         for (Task task : taskList) {
@@ -459,10 +461,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testIntersection() {
-        Task task1 = new TaskImpl("Summary1", "Description1");
+        Task task1 = new Task("Summary1", "Description1");
         task1.setStartDate(LocalDateTime.of(2022, 1, 1, 10, 0));
         task1.setDurationInMinutes(50);
-        Task task2 = new TaskImpl("Summary2", "Description2");
+        Task task2 = new Task("Summary2", "Description2");
         task2.setStartDate(LocalDateTime.of(2022, 1, 1, 10, 0));
         task2.setDurationInMinutes(50);
         taskManager.createTask(task1);

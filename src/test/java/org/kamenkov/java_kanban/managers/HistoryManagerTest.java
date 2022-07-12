@@ -1,7 +1,9 @@
 package org.kamenkov.java_kanban.managers;
 
 import org.junit.jupiter.api.Test;
-import org.kamenkov.java_kanban.task.*;
+import org.kamenkov.java_kanban.task.Epic;
+import org.kamenkov.java_kanban.task.Subtask;
+import org.kamenkov.java_kanban.task.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +17,7 @@ abstract class HistoryManagerTest<T extends HistoryManager> {
 
     @Test
     void add() {
-        Task task = new TaskImpl("Summary", "Description");
+        Task task = new Task("Summary", "Description");
         task.setId(1L);
         historyManager.add(task);
         final List<Task> history = historyManager.getHistory();
@@ -25,7 +27,7 @@ abstract class HistoryManagerTest<T extends HistoryManager> {
 
     @Test
     void addDuplicate() {
-        Task task = new TaskImpl("Summary", "Description");
+        Task task = new Task("Summary", "Description");
         task.setId(1L);
         historyManager.add(task);
         List<Task> history = historyManager.getHistory();
@@ -39,16 +41,16 @@ abstract class HistoryManagerTest<T extends HistoryManager> {
     @Test
     void addDuplicateFromMiddle() {
         List<Task> tasks = new ArrayList<>();
-        Task task1 = new TaskImpl("Summary", "Description");
+        Task task1 = new Task("Summary", "Description");
         task1.setId(1L);
         tasks.add(task1);
-        Task task2 = new TaskImpl("Summary", "Description");
+        Task task2 = new Task("Summary", "Description");
         task2.setId(2L);
         tasks.add(task2);
-        Epic epic = new EpicImpl("Summary", "Description");
+        Epic epic = new Epic("Summary", "Description");
         epic.setId(3L);
         tasks.add(epic);
-        Subtask subtask = new SubtaskImpl("Summary", "Description", 3L);
+        Subtask subtask = new Subtask("Summary", "Description", 3L);
         subtask.setId(4L);
         tasks.add(subtask);
         for (Task task : tasks) {
@@ -69,16 +71,16 @@ abstract class HistoryManagerTest<T extends HistoryManager> {
     @Test
     void removeFromBeginning() {
         List<Task> tasks = new ArrayList<>();
-        Task task1 = new TaskImpl("Summary", "Description");
+        Task task1 = new Task("Summary", "Description");
         task1.setId(1L);
         tasks.add(task1);
-        Task task2 = new TaskImpl("Summary", "Description");
+        Task task2 = new Task("Summary", "Description");
         task2.setId(2L);
         tasks.add(task2);
-        Epic epic = new EpicImpl("Summary", "Description");
+        Epic epic = new Epic("Summary", "Description");
         epic.setId(3L);
         tasks.add(epic);
-        Subtask subtask = new SubtaskImpl("Summary", "Description", 3L);
+        Subtask subtask = new Subtask("Summary", "Description", 3L);
         subtask.setId(4L);
         tasks.add(subtask);
         for (Task task : tasks) {
@@ -97,16 +99,16 @@ abstract class HistoryManagerTest<T extends HistoryManager> {
     @Test
     void removeFromMiddle() {
         List<Task> tasks = new ArrayList<>();
-        Task task1 = new TaskImpl("Summary", "Description");
+        Task task1 = new Task("Summary", "Description");
         task1.setId(1L);
         tasks.add(task1);
-        Task task2 = new TaskImpl("Summary", "Description");
+        Task task2 = new Task("Summary", "Description");
         task2.setId(2L);
         tasks.add(task2);
-        Epic epic = new EpicImpl("Summary", "Description");
+        Epic epic = new Epic("Summary", "Description");
         epic.setId(3L);
         tasks.add(epic);
-        Subtask subtask = new SubtaskImpl("Summary", "Description", 3L);
+        Subtask subtask = new Subtask("Summary", "Description", 3L);
         subtask.setId(4L);
         tasks.add(subtask);
         for (Task task : tasks) {
@@ -125,16 +127,16 @@ abstract class HistoryManagerTest<T extends HistoryManager> {
     @Test
     void removeFromEnd() {
         List<Task> tasks = new ArrayList<>();
-        Task task1 = new TaskImpl("Summary", "Description");
+        Task task1 = new Task("Summary", "Description");
         task1.setId(1L);
         tasks.add(task1);
-        Task task2 = new TaskImpl("Summary", "Description");
+        Task task2 = new Task("Summary", "Description");
         task2.setId(2L);
         tasks.add(task2);
-        Epic epic = new EpicImpl("Summary", "Description");
+        Epic epic = new Epic("Summary", "Description");
         epic.setId(3L);
         tasks.add(epic);
-        Subtask subtask = new SubtaskImpl("Summary", "Description", 3L);
+        Subtask subtask = new Subtask("Summary", "Description", 3L);
         subtask.setId(4L);
         tasks.add(subtask);
         for (Task task : tasks) {
@@ -154,16 +156,16 @@ abstract class HistoryManagerTest<T extends HistoryManager> {
     @Test
     void getHistory() {
         List<Task> tasks = new ArrayList<>();
-        Task task1 = new TaskImpl("Summary", "Description");
+        Task task1 = new Task("Summary", "Description");
         task1.setId(1L);
         tasks.add(task1);
-        Task task2 = new TaskImpl("Summary", "Description");
+        Task task2 = new Task("Summary", "Description");
         task2.setId(2L);
         tasks.add(task2);
-        Epic epic = new EpicImpl("Summary", "Description");
+        Epic epic = new Epic("Summary", "Description");
         epic.setId(3L);
         tasks.add(epic);
-        Subtask subtask = new SubtaskImpl("Summary", "Description", 3L);
+        Subtask subtask = new Subtask("Summary", "Description", 3L);
         subtask.setId(4L);
         tasks.add(subtask);
         Collections.shuffle(tasks);

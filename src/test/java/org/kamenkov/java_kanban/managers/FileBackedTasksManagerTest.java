@@ -3,7 +3,9 @@ package org.kamenkov.java_kanban.managers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.kamenkov.java_kanban.task.*;
+import org.kamenkov.java_kanban.task.Epic;
+import org.kamenkov.java_kanban.task.Subtask;
+import org.kamenkov.java_kanban.task.Task;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,13 +72,13 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     void save(@TempDir File tempDir) throws IOException {
         File output = new File(tempDir, "TestOutput.csv");
-        Task task = new TaskImpl("Summary1", "Description1");
+        Task task = new Task("Summary1", "Description1");
         task.setStartDate(LocalDateTime.of(2022, 1, 1, 10, 0));
         task.setDurationInMinutes(30);
         Long taskId = taskManager.createTask(task);
-        Epic epic = new EpicImpl("Summary2", "Description2");
+        Epic epic = new Epic("Summary2", "Description2");
         Long epicId = taskManager.createEpic(epic);
-        Subtask subtask = new SubtaskImpl("Summary3", "Description3", epicId);
+        Subtask subtask = new Subtask("Summary3", "Description3", epicId);
         subtask.setStartDate(LocalDateTime.of(2022, 1, 1, 11, 0));
         subtask.setDurationInMinutes(30);
         Long subtaskId = taskManager.createSubtask(subtask);
@@ -105,7 +107,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     void saveOneEpicWithoutHistory(@TempDir File tempDir) throws IOException {
         File file = new File(tempDir, "TestOutput.csv");
-        Epic epic = new EpicImpl("Summary", "Description");
+        Epic epic = new Epic("Summary", "Description");
         taskManager.createEpic(epic);
         taskManager.save(file);
         assertTrue(file.exists());

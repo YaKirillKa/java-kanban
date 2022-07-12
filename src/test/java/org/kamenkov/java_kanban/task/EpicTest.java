@@ -7,7 +7,7 @@ import org.kamenkov.java_kanban.Status;
 import org.kamenkov.java_kanban.managers.Managers;
 import org.kamenkov.java_kanban.managers.TaskManager;
 
-class EpicImplTest {
+class EpicTest {
 
     private TaskManager taskManager;
     private Epic epic;
@@ -15,7 +15,7 @@ class EpicImplTest {
     @BeforeEach
     public void beforeEach() {
         taskManager = Managers.getDefault();
-        Long id = taskManager.createEpic(new EpicImpl("summary", "description"));
+        Long id = taskManager.createEpic(new Epic("summary", "description"));
         epic = taskManager.getEpicObjectById(id);
     }
 
@@ -50,7 +50,7 @@ class EpicImplTest {
     }
 
     private Subtask createSubtaskWithStatus(Status status) {
-        Long id = taskManager.createSubtask(new SubtaskImpl("summary", "description", epic.getId()));
+        Long id = taskManager.createSubtask(new Subtask("summary", "description", epic.getId()));
         Subtask subtask = taskManager.getSubtaskObjectById(id);
         subtask.setStatus(status);
         taskManager.updateSubtask(subtask, subtask.getId());

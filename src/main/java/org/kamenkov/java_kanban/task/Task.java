@@ -4,74 +4,165 @@ import org.kamenkov.java_kanban.Status;
 
 import java.time.LocalDateTime;
 
-public interface Task {
+public class Task {
+
+    private static final Type type = Type.TASK;
+    private Long id;
+    private String summary;
+    private String description;
+    private Status status;
+    private LocalDateTime startDate;
+    long durationInMinutes;
+
+    public Task(String summary, String description) {
+        this.summary = summary;
+        this.description = description;
+        this.status = Status.NEW;
+    }
 
     /**
      * Returns Type of {@link Task}.
      *
      * @return type.
      */
-    Type getType();
+    public Type getType() {
+        return type;
+    }
 
     /**
      * Returns summary of {@link Task}.
      *
      * @return summary.
      */
-    String getSummary();
+    public String getSummary() {
+        return summary;
+    }
 
     /**
      * Update summary of {@link Task}
      * @param summary {@link String} that should be saved in summary.
      */
-    void setSummary(String summary);
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
     /**
      * Returns description of {@link Task}.
      *
      * @return description.
      */
-    String getDescription();
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * Update description of {@link Task}
      * @param description {@link String} that should be saved in description.
      */
-    void setDescription(String description);
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     /**
      * Returns status of {@link Task}.
      *
      * @return status.
      */
-    Status getStatus();
+    public Status getStatus() {
+        return status;
+    }
 
     /**
      * Update status of {@link Task}
      * @param status {@link Status} that should be saved in status.
      */
-    void setStatus(Status status);
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     /**
      * Returns id of {@link Task}.
      *
      * @return unique id of {@link Task}.
      */
-    Long getId();
+    public Long getId() {
+        return id;
+    }
 
     /**
      * Update unique id of {@link Task}.
      * @param id {@link Long} that should be saved in id.
      */
-    void setId(Long id);
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    LocalDateTime getStartDate();
+    /**
+     * Returns start date of the task.
+     *
+     * @return startDate.
+     */
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
 
-    void setStartDate(LocalDateTime startDate);
+    /**
+     * Updates start date of the task.
+     * @param startDate the date should be set.
+     */
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
 
-    LocalDateTime getEndDate();
+    /**
+     * Returns end date of the task.
+     *
+     * @return endDate.
+     */
+    public LocalDateTime getEndDate() {
+        return startDate == null ? null : startDate.plusMinutes(durationInMinutes);
+    }
 
-    long getDurationInMinutes();
+    /**
+     * Returns task duration in minutes.
+     *
+     * @return duration.
+     */
+    public long getDurationInMinutes() {
+        return durationInMinutes;
+    }
 
-    void setDurationInMinutes(long durationInMinutes);
+    /**
+     * Updates task duration in minutes.
+     * @param durationInMinutes duration of the task that should be set.
+     */
+    public void setDurationInMinutes(long durationInMinutes) {
+        this.durationInMinutes = durationInMinutes;
+    }
+
+    @Override
+    public String toString() {
+        return id + "," + type + "," + summary + "," + status + ","
+                + description + "," + startDate + "," + durationInMinutes + "," + getEndDate();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        if (getId() != null ? !getId().equals(task.getId()) : task.getId() != null) return false;
+        if (getSummary() != null ? !getSummary().equals(task.getSummary()) : task.getSummary() != null) return false;
+        return getDescription() != null ? getDescription().equals(task.getDescription()) : task.getDescription() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getSummary() != null ? getSummary().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        return result;
+    }
 }

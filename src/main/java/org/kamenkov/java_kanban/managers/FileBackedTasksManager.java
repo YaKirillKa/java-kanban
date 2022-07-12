@@ -2,7 +2,10 @@ package org.kamenkov.java_kanban.managers;
 
 import org.kamenkov.java_kanban.Status;
 import org.kamenkov.java_kanban.exceptions.ManagerSaveException;
-import org.kamenkov.java_kanban.task.*;
+import org.kamenkov.java_kanban.task.Epic;
+import org.kamenkov.java_kanban.task.Subtask;
+import org.kamenkov.java_kanban.task.Task;
+import org.kamenkov.java_kanban.task.Type;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -81,13 +84,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Task task = null;
         switch (type) {
             case EPIC:
-                task = new EpicImpl(summary, description);
+                task = new Epic(summary, description);
                 break;
             case TASK:
-                task = new TaskImpl(summary, description);
+                task = new Task(summary, description);
                 break;
             case SUBTASK:
-                task = new SubtaskImpl(summary, description, parentId);
+                task = new Subtask(summary, description, parentId);
                 break;
         }
         Objects.requireNonNull(task);
