@@ -83,7 +83,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeAllTaskObjects() {
         for (Map.Entry<Long, Task> entry : tasks.entrySet()) {
             historyManager.remove(entry.getKey());
-            prioritizedTasks.removeIf(t ->  t.equals(entry.getValue()));
+            prioritizedTasks.remove(entry.getValue());
         }
         tasks.clear();
     }
@@ -93,7 +93,7 @@ public class InMemoryTaskManager implements TaskManager {
         removeAllSubtaskObjects();
         for (Map.Entry<Long, Epic> entry : epics.entrySet()) {
             historyManager.remove(entry.getKey());
-            prioritizedTasks.removeIf(t ->  t.equals(entry.getValue()));
+            prioritizedTasks.remove(entry.getValue());
         }
         epics.clear();
     }
@@ -103,7 +103,7 @@ public class InMemoryTaskManager implements TaskManager {
         Set<Long> parentIds = subtasks.values().stream().map(Subtask::getParentId).collect(Collectors.toSet());
         for (Map.Entry<Long, Subtask> entry : subtasks.entrySet()) {
             historyManager.remove(entry.getKey());
-            prioritizedTasks.removeIf(t ->  t.equals(entry.getValue()));
+            prioritizedTasks.remove(entry.getValue());
         }
         subtasks.clear();
         for (Long id : parentIds) {
@@ -262,7 +262,7 @@ public class InMemoryTaskManager implements TaskManager {
      */
     <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
         historyManager.remove(id);
-        prioritizedTasks.removeIf(t ->  t.equals(map.get(id)));
+        prioritizedTasks.remove(map.get(id));
         map.remove(id);
     }
 
@@ -296,7 +296,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (o1sd != null && o2sd != null && !o1sd.equals(o2sd)) {
                 return o1sd.compareTo(o2sd);
             }
-            return 1;
+            return Long.compare(o1.getId(), o2.getId());
         }
     }
 }
