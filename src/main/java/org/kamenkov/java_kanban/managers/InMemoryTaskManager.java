@@ -293,10 +293,14 @@ public class InMemoryTaskManager implements TaskManager {
         public int compare(Task o1, Task o2) {
             LocalDateTime o1sd = o1.getStartDate();
             LocalDateTime o2sd = o2.getStartDate();
-            if (o1sd != null && o2sd != null && !o1sd.equals(o2sd)) {
-                return o1sd.compareTo(o2sd);
+            if (o1sd != null) {
+                if (o2sd == null) {
+                    return -1;
+                } else {
+                    return o1sd.compareTo(o2sd);
+                }
             }
-            return Long.compare(o1.getId(), o2.getId());
+            return o1.getId().compareTo(o2.getId());
         }
     }
 }
