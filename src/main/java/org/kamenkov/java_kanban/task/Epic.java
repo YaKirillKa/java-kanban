@@ -5,19 +5,18 @@ import org.kamenkov.java_kanban.Status;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Epic extends Task {
 
-    private static final Type type = Type.EPIC;
     private final List<Subtask> subtasks;
     private LocalDateTime endDate;
 
     public Epic(String summary, String description) {
         super(summary, description);
         subtasks = new ArrayList<>();
+        setType(Type.EPIC);
         recalculateStatus();
     }
 
@@ -105,25 +104,8 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return getId() + "," + type + "," + getSummary() + "," + getStatus() + "," + getDescription() + ","
+        return getId() + "," + getType() + "," + getSummary() + "," + getStatus() + "," + getDescription() + ","
                 + getStartDate() + "," + getDurationInMinutes() + "," + getEndDate();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Epic epic = (Epic) o;
-
-        return Objects.equals(subtasks, epic.subtasks);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (subtasks != null ? subtasks.hashCode() : 0);
-        return result;
-    }
 }

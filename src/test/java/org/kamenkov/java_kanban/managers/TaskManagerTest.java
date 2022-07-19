@@ -288,8 +288,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         updatedTask.setStatus(Status.DONE);
         taskManager.updateTask(updatedTask, createdTaskId);
         final Task savedTask = taskManager.getTaskObjectById(createdTaskId);
-        assertNotEquals(createdTask, savedTask);
-        assertEquals(updatedTask, savedTask);
+        assertNotEquals(createdTask.getDescription(), savedTask.getDescription());
+        assertNotEquals(createdTask.getSummary(), savedTask.getSummary());
+        assertEquals(updatedTask.getDescription(), savedTask.getDescription());
+        assertEquals(updatedTask.getSummary(), savedTask.getSummary());
     }
 
     @Test
@@ -308,8 +310,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         updatedEpic.setDescription("Description2");
         taskManager.updateEpic(updatedEpic, createdEpicId);
         final Epic savedEpic = taskManager.getEpicObjectById(createdEpicId);
-        assertNotEquals(createdEpic, savedEpic);
-        assertEquals(updatedEpic, savedEpic);
+        assertNotEquals(createdEpic.getDescription(), savedEpic.getDescription());
+        assertNotEquals(createdEpic.getSummary(), savedEpic.getSummary());
+        assertEquals(updatedEpic.getDescription(), savedEpic.getDescription());
+        assertEquals(updatedEpic.getSummary(), savedEpic.getSummary());
     }
 
     @Test
@@ -325,13 +329,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
         final Long createdEpicId = taskManager.createEpic(createdEpic);
         Subtask createdSubtask = new Subtask("Summary", "Description", createdEpicId);
         final Long createdSubtaskId = taskManager.createSubtask(createdSubtask);
-        Subtask updatedSubtask = new Subtask("Summary", "Description", createdEpicId);
+        Subtask updatedSubtask = new Subtask("Summary1", "Description1", createdEpicId);
         updatedSubtask.setId(createdSubtaskId);
         updatedSubtask.setDescription("Description1");
         taskManager.updateSubtask(updatedSubtask, createdSubtaskId);
         final Subtask savedSubtask = taskManager.getSubtaskObjectById(createdSubtaskId);
-        assertNotEquals(createdSubtask, savedSubtask);
-        assertEquals(updatedSubtask, savedSubtask);
+        assertNotEquals(createdSubtask.getDescription(), savedSubtask.getDescription());
+        assertNotEquals(createdSubtask.getSummary(), savedSubtask.getSummary());
+        assertEquals(updatedSubtask.getDescription(), savedSubtask.getDescription());
+        assertEquals(updatedSubtask.getSummary(), savedSubtask.getSummary());
     }
 
     @Test

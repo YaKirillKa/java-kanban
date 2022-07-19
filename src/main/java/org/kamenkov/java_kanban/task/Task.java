@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class Task {
 
-    private static final Type type = Type.TASK;
+    private Type type;
     private Long id;
     private String summary;
     private String description;
@@ -18,6 +18,7 @@ public class Task {
         this.summary = summary;
         this.description = description;
         this.status = Status.NEW;
+        this.type = Type.TASK;
     }
 
     /**
@@ -27,6 +28,10 @@ public class Task {
      */
     public Type getType() {
         return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     /**
@@ -153,16 +158,11 @@ public class Task {
 
         Task task = (Task) o;
 
-        if (getId() != null ? !getId().equals(task.getId()) : task.getId() != null) return false;
-        if (getSummary() != null ? !getSummary().equals(task.getSummary()) : task.getSummary() != null) return false;
-        return getDescription() != null ? getDescription().equals(task.getDescription()) : task.getDescription() == null;
+        return getId() != null ? getId().equals(task.getId()) : task.getId() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getSummary() != null ? getSummary().hashCode() : 0);
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        return result;
+        return getId() != null ? getId().hashCode() : 0;
     }
 }
