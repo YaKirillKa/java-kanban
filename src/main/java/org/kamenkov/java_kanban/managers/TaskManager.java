@@ -142,10 +142,10 @@ public interface TaskManager {
     /**
      * Returns all {@link Subtask} from given parent object.
      *
-     * @param epic subtasks of this should be retrieved.
+     * @param id Epic id whose subtasks should be retrieved.
      * @return {@link Collection} of {@link Subtask}.
      */
-    Collection<Subtask> getSubtaskObjectsByParent(Epic epic);
+    Collection<Subtask> getSubtaskObjectsByParentId(Long id);
 
     /**
      * Returns a {@link Collection} of {@link Task}s that have been viewed by users.

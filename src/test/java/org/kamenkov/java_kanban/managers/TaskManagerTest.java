@@ -419,7 +419,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getSubtaskObjectsByParent() {
+    void getSubtaskObjectsByParentId() {
         Epic epic = new Epic("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
         Subtask subtask1 = new Subtask("Summary1", "Description1", parentId);
@@ -430,14 +430,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
             taskManager.createSubtask(subtask);
         }
         final Epic savedEpic = taskManager.getEpicObjectById(parentId);
-        List<Subtask> savedSubtasks = new ArrayList<>(taskManager.getSubtaskObjectsByParent(savedEpic));
+        List<Subtask> savedSubtasks = new ArrayList<>(taskManager.getSubtaskObjectsByParentId(savedEpic.getId()));
         assertFalse(savedSubtasks.isEmpty());
         assertEquals(subtaskList, savedSubtasks);
     }
 
     @Test
-    void getSubtaskObjectsByParentIfParentIsNull() {
-        assertNull(taskManager.getSubtaskObjectsByParent(null));
+    void getSubtaskObjectsByParentIfParentIdIsNull() {
+        assertNull(taskManager.getSubtaskObjectsByParentId(null));
     }
 
     @Test

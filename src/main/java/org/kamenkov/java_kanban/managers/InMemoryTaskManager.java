@@ -191,7 +191,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Collection<Subtask> getSubtaskObjectsByParent(Epic epic) {
+    public Collection<Subtask> getSubtaskObjectsByParentId(Long id) {
+        Epic epic = getEpicObjectById(id);
         return epic == null ? null : epic.getSubtaskObjects();
     }
 
