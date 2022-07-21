@@ -105,6 +105,9 @@ public class HttpTaskServer {
         server.createContext(SUBTASK_ENDPOINT, new DefaultHandler(subtaskMethods));
         server.createContext(SUBTASK_EPIC_ENDPOINT, new DefaultHandler(subtaskEpicMethods));
         server.createContext(HISTORY_ENDPOINT, new DefaultHandler(historyMethods));
+    }
+
+    public void start() {
         server.start();
     }
 
