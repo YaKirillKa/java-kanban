@@ -71,7 +71,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     void save(@TempDir File tempDir) throws IOException {
-        File output = new File(tempDir, "TestOutput.csv");
+        String path = tempDir + "TestOutput.csv";
         Task task = new Task("Summary1", "Description1");
         task.setStartDate(LocalDateTime.of(2022, 1, 1, 10, 0));
         task.setDurationInMinutes(30);
@@ -85,11 +85,12 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         subtask = taskManager.getSubtaskObjectById(subtaskId);
         epic = taskManager.getEpicObjectById(epicId);
         task = taskManager.getTaskObjectById(taskId);
-        taskManager.save(output);
+        taskManager.save(path);
         String history = taskManager.getHistory().stream()
                 .map(Task::getId)
                 .map(String::valueOf)
                 .collect(Collectors.joining(","));
+        File output = new File(path);
         List<String> lines = List.of(HEADER, task.toString(), epic.toString(), subtask.toString(), "", history);
         assertTrue(output.exists());
         assertLinesMatch(lines, Files.readAllLines(output.toPath()));
@@ -97,8 +98,9 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     void saveEmptyTaskManager(@TempDir File tempDir) throws IOException {
-        File file = new File(tempDir, "TestOutput.csv");
-        taskManager.save(file);
+        String path = tempDir + "TestOutput.csv";
+        File file = new File(path);
+        taskManager.save(path);
         assertTrue(file.exists());
         assertLinesMatch(List.of(HEADER, ""),
                 Files.readAllLines(file.toPath()));
@@ -106,10 +108,11 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     void saveOneEpicWithoutHistory(@TempDir File tempDir) throws IOException {
-        File file = new File(tempDir, "TestOutput.csv");
+        String path = tempDir + "TestOutput.csv";
+        File file = new File(path);
         Epic epic = new Epic("Summary", "Description");
         taskManager.createEpic(epic);
-        taskManager.save(file);
+        taskManager.save(path);
         assertTrue(file.exists());
         assertLinesMatch(List.of(HEADER, "1,EPIC,Summary,NEW,Description,null,0,null", ""),
                 Files.readAllLines(file.toPath()));

@@ -30,7 +30,7 @@ public class HttpTaskServer {
     private final Gson gson;
     private final HttpServer server;
 
-    public HttpTaskServer() throws IOException {
+    public HttpTaskServer() throws IOException, InterruptedException {
         gson = new Gson();
         taskManager = Managers.getDefault();
         Map<Method, Function<HttpExchange, Response>> tasksMethods = Map.ofEntries(

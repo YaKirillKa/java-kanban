@@ -1,23 +1,14 @@
 package org.kamenkov.java_kanban.task;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kamenkov.java_kanban.Status;
-import org.kamenkov.java_kanban.managers.Managers;
 import org.kamenkov.java_kanban.managers.TaskManager;
 
-class EpicTest {
+abstract class EpicTest<T extends TaskManager> {
 
-    private TaskManager taskManager;
-    private Epic epic;
-
-    @BeforeEach
-    public void beforeEach() {
-        taskManager = Managers.getDefault();
-        Long id = taskManager.createEpic(new Epic("summary", "description"));
-        epic = taskManager.getEpicObjectById(id);
-    }
+    T taskManager;
+    Epic epic;
 
     @Test
     void epicWithoutSubtasks() {
@@ -49,7 +40,7 @@ class EpicTest {
         Assertions.assertEquals(Status.IN_PROGRESS, epic.getStatus());
     }
 
-    private Subtask createSubtaskWithStatus(Status status) {
+    Subtask createSubtaskWithStatus(Status status) {
         Long id = taskManager.createSubtask(new Subtask("summary", "description", epic.getId()));
         Subtask subtask = taskManager.getSubtaskObjectById(id);
         subtask.setStatus(status);

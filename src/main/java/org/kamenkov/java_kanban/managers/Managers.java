@@ -1,11 +1,14 @@
 package org.kamenkov.java_kanban.managers;
 
+import java.io.IOException;
+import java.net.URI;
+
 public class Managers {
 
     private Managers() {}
 
-    public static TaskManager getDefault() {
-        return new FileBackedTasksManager();
+    public static TaskManager getDefault() throws IOException, InterruptedException {
+        return new HttpTasksManager(URI.create("http://localhost:8078"));
     }
 
     public static HistoryManager getDefaultHistoryManager() {
