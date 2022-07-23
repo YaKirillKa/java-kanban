@@ -16,7 +16,7 @@ public class JsonEpicConverter implements TaskConverter {
 
     @Override
     public boolean support(String type) {
-        return Type.TASK.name().equals(type);
+        return Type.EPIC.name().equals(type);
     }
 
     @Override

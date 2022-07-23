@@ -125,12 +125,16 @@ public class HttpTaskServer {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            exchange.getResponseHeaders().put(CONTENT_TYPE, JSON);
-            Method method = Method.valueOf(exchange.getRequestMethod());
-            if (operations.containsKey(method)) {
-                performRequest(exchange, operations.get(method));
-            } else {
-                exchange.sendResponseHeaders(405, -1);
+            try {
+                exchange.getResponseHeaders().put(CONTENT_TYPE, JSON);
+                Method method = Method.valueOf(exchange.getRequestMethod());
+                if (operations.containsKey(method)) {
+                    performRequest(exchange, operations.get(method));
+                } else {
+                    exchange.sendResponseHeaders(405, -1);
+                }
+            } finally {
+                exchange.close();
             }
         }
 
