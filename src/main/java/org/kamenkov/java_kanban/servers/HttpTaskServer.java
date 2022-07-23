@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.kamenkov.java_kanban.managers.Managers;
 import org.kamenkov.java_kanban.managers.TaskManager;
 import org.kamenkov.java_kanban.task.Type;
 import org.kamenkov.java_kanban.utils.Utils;
@@ -26,13 +25,11 @@ public class HttpTaskServer {
     private static final String SUBTASK_ENDPOINT = "/tasks/subtask";
     private static final String SUBTASK_EPIC_ENDPOINT = "/tasks/subtask/epic";
     private static final String HISTORY_ENDPOINT = "/tasks/history";
-    private final TaskManager taskManager;
     private final Gson gson;
     private final HttpServer server;
 
-    public HttpTaskServer() throws IOException, InterruptedException {
+    public HttpTaskServer(TaskManager taskManager) throws IOException {
         gson = new Gson();
-        taskManager = Managers.getDefault();
         Map<Method, Function<HttpExchange, Response>> tasksMethods = Map.ofEntries(
                 Map.entry(Method.GET, exchange -> {
                     String json = Utils.transformTasksToJson(taskManager);
@@ -115,7 +112,7 @@ public class HttpTaskServer {
         server.stop(5);
     }
 
-    private class DefaultHandler implements HttpHandler {
+    private static class DefaultHandler implements HttpHandler {
 
         private final Map<Method, Function<HttpExchange, Response>> operations;
 

@@ -1,0 +1,293 @@
+{
+  "path": "backup.csv",
+  "idManager": {
+    "lastId": 7
+  },
+  "historyManager": [{"type":"TASK","id":6,"summary":"First Task","description":"desc1","status":"NEW","startDate":{"date":{"year":2022,"month":7,"day":4},"time":{"hour":10,"minute":0,"second":0,"nano":0}},"durationInMinutes":11},{"subtasks":[{"parentId":1,"type":"SUBTASK","id":3,"summary":"Вторая сабтаска первого эпика","description":"Описание второй сабтаски первого эпика","status":"IN_PROGRESS","durationInMinutes":0}],"type":"EPIC","id":1,"summary":"Первый эпик","description":"Описание первого эпика","status":"IN_PROGRESS","durationInMinutes":0}],
+  "tasks": {
+    "6": {
+      "type": "TASK",
+      "id": 6,
+      "summary": "First Task",
+      "description": "desc1",
+      "status": "NEW",
+      "startDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 4
+        },
+        "time": {
+          "hour": 10,
+          "minute": 0,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "durationInMinutes": 11
+    },
+    "7": {
+      "type": "TASK",
+      "id": 7,
+      "summary": "Second Task",
+      "description": "desc2",
+      "status": "NEW",
+      "startDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 2
+        },
+        "time": {
+          "hour": 10,
+          "minute": 0,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "durationInMinutes": 11
+    }
+  },
+  "epics": {
+    "1": {
+      "subtasks": [
+        {
+          "parentId": 1,
+          "type": "SUBTASK",
+          "id": 3,
+          "summary": "Вторая сабтаска первого эпика",
+          "description": "Описание второй сабтаски первого эпика",
+          "status": "IN_PROGRESS",
+          "durationInMinutes": 0
+        }
+      ],
+      "type": "EPIC",
+      "id": 1,
+      "summary": "Первый эпик",
+      "description": "Описание первого эпика",
+      "status": "IN_PROGRESS",
+      "durationInMinutes": 0
+    },
+    "4": {
+      "subtasks": [
+        {
+          "parentId": 4,
+          "type": "SUBTASK",
+          "id": 5,
+          "summary": "Первая сабтаска второго эпика",
+          "description": "Описание первой сабтаски второго эпика",
+          "status": "DONE",
+          "startDate": {
+            "date": {
+              "year": 2022,
+              "month": 7,
+              "day": 3
+            },
+            "time": {
+              "hour": 10,
+              "minute": 10,
+              "second": 0,
+              "nano": 0
+            }
+          },
+          "durationInMinutes": 250
+        }
+      ],
+      "endDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 3
+        },
+        "time": {
+          "hour": 14,
+          "minute": 20,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "type": "EPIC",
+      "id": 4,
+      "summary": "Второй эпик",
+      "description": "Описание второго эпика",
+      "status": "DONE",
+      "startDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 3
+        },
+        "time": {
+          "hour": 10,
+          "minute": 10,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "durationInMinutes": 250
+    }
+  },
+  "subtasks": {
+    "3": {
+      "parentId": 1,
+      "type": "SUBTASK",
+      "id": 3,
+      "summary": "Вторая сабтаска первого эпика",
+      "description": "Описание второй сабтаски первого эпика",
+      "status": "IN_PROGRESS",
+      "durationInMinutes": 0
+    },
+    "5": {
+      "parentId": 4,
+      "type": "SUBTASK",
+      "id": 5,
+      "summary": "Первая сабтаска второго эпика",
+      "description": "Описание первой сабтаски второго эпика",
+      "status": "DONE",
+      "startDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 3
+        },
+        "time": {
+          "hour": 10,
+          "minute": 10,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "durationInMinutes": 250
+    }
+  },
+  "prioritizedTasks": [
+    {
+      "type": "TASK",
+      "id": 7,
+      "summary": "Second Task",
+      "description": "desc2",
+      "status": "NEW",
+      "startDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 2
+        },
+        "time": {
+          "hour": 10,
+          "minute": 0,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "durationInMinutes": 11
+    },
+    {
+      "subtasks": [
+        {
+          "parentId": 4,
+          "type": "SUBTASK",
+          "id": 5,
+          "summary": "Первая сабтаска второго эпика",
+          "description": "Описание первой сабтаски второго эпика",
+          "status": "DONE",
+          "startDate": {
+            "date": {
+              "year": 2022,
+              "month": 7,
+              "day": 3
+            },
+            "time": {
+              "hour": 10,
+              "minute": 10,
+              "second": 0,
+              "nano": 0
+            }
+          },
+          "durationInMinutes": 250
+        }
+      ],
+      "endDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 3
+        },
+        "time": {
+          "hour": 14,
+          "minute": 20,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "type": "EPIC",
+      "id": 4,
+      "summary": "Второй эпик",
+      "description": "Описание второго эпика",
+      "status": "DONE",
+      "startDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 3
+        },
+        "time": {
+          "hour": 10,
+          "minute": 10,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "durationInMinutes": 250
+    },
+    {
+      "type": "TASK",
+      "id": 6,
+      "summary": "First Task",
+      "description": "desc1",
+      "status": "NEW",
+      "startDate": {
+        "date": {
+          "year": 2022,
+          "month": 7,
+          "day": 4
+        },
+        "time": {
+          "hour": 10,
+          "minute": 0,
+          "second": 0,
+          "nano": 0
+        }
+      },
+      "durationInMinutes": 11
+    },
+    {
+      "subtasks": [
+        {
+          "parentId": 1,
+          "type": "SUBTASK",
+          "id": 3,
+          "summary": "Вторая сабтаска первого эпика",
+          "description": "Описание второй сабтаски первого эпика",
+          "status": "IN_PROGRESS",
+          "durationInMinutes": 0
+        }
+      ],
+      "type": "EPIC",
+      "id": 1,
+      "summary": "Первый эпик",
+      "description": "Описание первого эпика",
+      "status": "IN_PROGRESS",
+      "durationInMinutes": 0
+    },
+    {
+      "parentId": 1,
+      "type": "SUBTASK",
+      "id": 3,
+      "summary": "Вторая сабтаска первого эпика",
+      "description": "Описание второй сабтаски первого эпика",
+      "status": "IN_PROGRESS",
+      "durationInMinutes": 0
+    }
+  ]
+}

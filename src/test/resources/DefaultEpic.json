@@ -1,0 +1,16 @@
+{
+  "type": "EPIC",
+  "summary": "summary",
+  "description": "Description",
+  "status": "NEW",
+  "subtasks" : [
+    {
+      "parentId": 1,
+      "type": "SUBTASK",
+      "id": 2,
+      "summary": "summary",
+      "description": "Description",
+      "status": "NEW"
+    }
+  ]
+}
