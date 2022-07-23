@@ -18,6 +18,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private static final String DEFAULT_FILE_PATH = "backup.csv";
     private static final String HEADER = "id,type,name,status,description,start_date,duration,end_date,epic\n";
 
+    private final String path;
+
+    public FileBackedTasksManager() {
+        path = DEFAULT_FILE_PATH;
+    }
+
+    public FileBackedTasksManager(String path) {
+        this.path = Objects.requireNonNullElse(path, DEFAULT_FILE_PATH);
+    }
+
     /**
      * Returns new {@link FileBackedTasksManager} with initialized fields and all tasks.
      *
@@ -144,58 +154,58 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public Task getTaskObjectById(Long id) {
         final Task task = super.getTaskObjectById(id);
-        save(DEFAULT_FILE_PATH);
+        save(path);
         return task;
     }
 
     @Override
     public Epic getEpicObjectById(Long id) {
         final Epic epic = super.getEpicObjectById(id);
-        save(DEFAULT_FILE_PATH);
+        save(path);
         return epic;
     }
 
     @Override
     public Subtask getSubtaskObjectById(Long id) {
         final Subtask subtask = super.getSubtaskObjectById(id);
-        save(DEFAULT_FILE_PATH);
+        save(path);
         return subtask;
     }
 
     @Override
     public void removeAllTaskObjects() {
         super.removeAllTaskObjects();
-        save(DEFAULT_FILE_PATH);
+        save(path);
     }
 
     @Override
     public void removeAllEpicObjects() {
         super.removeAllEpicObjects();
-        save(DEFAULT_FILE_PATH);
+        save(path);
     }
 
     @Override
     public void removeAllSubtaskObjects() {
         super.removeAllSubtaskObjects();
-        save(DEFAULT_FILE_PATH);
+        save(path);
     }
 
     @Override
     <T extends Task> Long createTask(T taskObject, Map<Long, T> map) {
         final Long task = super.createTask(taskObject, map);
-        save(DEFAULT_FILE_PATH);
+        save(path);
         return task;
     }
 
     @Override
     <T extends Task> void updateTask(T taskObject, Map<Long, T> map, Long id) {
         super.updateTask(taskObject, map, id);
-        save(DEFAULT_FILE_PATH);
+        save(path);
     }
 
     @Override
     <T extends Task> void removeEntryFromMap(Map<Long, T> map, Long id) {
         super.removeEntryFromMap(map, id);
-        save(DEFAULT_FILE_PATH);
+        save(path);
     }
 }

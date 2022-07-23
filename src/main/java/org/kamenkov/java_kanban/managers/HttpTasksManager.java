@@ -13,6 +13,7 @@ public class HttpTasksManager extends FileBackedTasksManager {
     private final KVTaskClient client;
 
     public HttpTasksManager(URI uri) throws IOException, InterruptedException {
+        super("test");
         client = new KVTaskClient(uri);
     }
 
