@@ -110,7 +110,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getSubtaskObject() {
+    void getSubtaskObjectById() {
         Epic epic = new Epic("Summary0", "Description0");
         Long parentId = taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Summary1", "Description1", parentId);

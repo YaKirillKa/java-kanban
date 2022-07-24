@@ -17,10 +17,12 @@ public class HttpTasksManager extends FileBackedTasksManager {
             .registerTypeAdapter(IdManager.class, (InstanceCreator<IdManager>) type -> new InMemoryIdManager())
             .serializeNulls()
             .create();
-    private final KVTaskClient client;
+    private KVTaskClient client;
+    private URI uri;
 
     public HttpTasksManager(URI uri) throws IOException, InterruptedException {
         super("test");
+        this.uri = uri;
         client = new KVTaskClient(uri);
     }
 

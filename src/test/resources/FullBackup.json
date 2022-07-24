@@ -1,5 +1,10 @@
 {
-  "path": "backup.csv",
+  "client": {
+    "API_TOKEN": "DEBUG",
+    "url": "http://localhost:8078"
+  },
+  "uri": "http://localhost:8078",
+  "path": "test",
   "idManager": {
     "lastId": 7
   },
