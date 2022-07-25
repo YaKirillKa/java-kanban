@@ -12,9 +12,12 @@ import java.util.Map;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * Постман: https://www.getpostman.com/collections/a83b61d9e1c81c10575c
+ * <a href="https://www.getpostman.com/collections/a83b61d9e1c81c10575c">Postman</a>
  */
 public class KVServer {
+	public static final String REGISTER_URL = "/register";
+	public static final String SAVE_URL = "/save";
+	public static final String LOAD_URL = "/load";
 	public static final int PORT = 8078;
 	private final String apiToken;
 	private final HttpServer server;
@@ -23,14 +26,15 @@ public class KVServer {
 	public KVServer() throws IOException {
 		apiToken = generateApiToken();
 		server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
-		server.createContext("/register", this::register);
-		server.createContext("/save", this::save);
-		server.createContext("/load", this::load);
+
+		server.createContext(REGISTER_URL, this::register);
+		server.createContext(SAVE_URL, this::save);
+		server.createContext(LOAD_URL, this::load);
 	}
 
 	private void load(HttpExchange h) throws IOException {
 		try {
-			if (!hasAuth(h)) {
+			if (hasNotAuth(h)) {
 				h.sendResponseHeaders(403, -1);
 				return;
 			}
@@ -57,7 +61,7 @@ public class KVServer {
 	private void save(HttpExchange h) throws IOException {
 		try {
 			System.out.println("\n/save");
-			if (!hasAuth(h)) {
+			if (hasNotAuth(h)) {
 				System.out.println("Запрос неавторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
 				h.sendResponseHeaders(403, 0);
 				return;
@@ -115,9 +119,9 @@ public class KVServer {
 		return "" + System.currentTimeMillis();
 	}
 
-	protected boolean hasAuth(HttpExchange h) {
+	protected boolean hasNotAuth(HttpExchange h) {
 		String rawQuery = h.getRequestURI().getRawQuery();
-		return rawQuery != null && (rawQuery.contains("API_TOKEN=" + apiToken) || rawQuery.contains("API_TOKEN=DEBUG"));
+		return rawQuery == null || (!rawQuery.contains("API_TOKEN=" + apiToken) && !rawQuery.contains("API_TOKEN=DEBUG"));
 	}
 
 	protected String readText(HttpExchange h) throws IOException {

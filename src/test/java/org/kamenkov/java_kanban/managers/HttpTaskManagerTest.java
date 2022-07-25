@@ -84,6 +84,18 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTasksManager> {
     }
 
     @Test
+    void getSubtaskObjectByParentId() throws IOException, InterruptedException {
+        Epic basicEpic = new Epic("summary", "description");
+        taskManager.createEpic(basicEpic);
+        Subtask basicSubtask = new Subtask("summary", "description", 1L);
+        taskManager.createSubtask(basicSubtask);
+        taskManager.createSubtask(basicSubtask);
+        List<Subtask> subtasks = gson.fromJson(getJsonTaskFromServer("subtask/epic?id=1").body(),
+                new TypeToken<ArrayList<Subtask>>() {}.getType());
+        Assertions.assertEquals(taskManager.getSubtaskObjectsByParentId(1L), subtasks);
+    }
+
+    @Test
     void deleteTaskObject() throws IOException, InterruptedException {
         Task basicTask = new Task("summary", "description");
         taskManager.createTask(basicTask);
@@ -151,28 +163,40 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTasksManager> {
     }
 
     @Test
-    void createEpicFromPost() throws IOException, InterruptedException {
+    void createUpdateEpicFromPost() throws IOException, InterruptedException {
         Assertions.assertTrue(taskManager.getAllEpicObjects().isEmpty());
         HttpResponse<String> response = sendFileAsPostMethodBody("DefaultEpic.json", "epic");
         Assertions.assertEquals(201, response.statusCode());
         Assertions.assertFalse(taskManager.getAllEpicObjects().isEmpty());
+        Assertions.assertEquals("summary", taskManager.getEpicObjectById(1L).getSummary());
+        response = sendFileAsPostMethodBody("UpdateEpic.json", "epic");
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("updated", taskManager.getEpicObjectById(1L).getSummary());
     }
 
     @Test
-    void createSubtaskFromPost() throws IOException, InterruptedException {
+    void createUpdateSubtaskFromPost() throws IOException, InterruptedException {
         sendFileAsPostMethodBody("DefaultEpic.json", "epic");
         Assertions.assertTrue(taskManager.getAllSubtaskObjects().isEmpty());
         HttpResponse<String> response = sendFileAsPostMethodBody("DefaultSubtask.json", "subtask");
         Assertions.assertEquals(201, response.statusCode());
         Assertions.assertFalse(taskManager.getAllSubtaskObjects().isEmpty());
+        Assertions.assertEquals("summary", taskManager.getSubtaskObjectById(2L).getSummary());
+        response = sendFileAsPostMethodBody("UpdateSubtask.json", "subtask");
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("updated", taskManager.getSubtaskObjectById(2L).getSummary());
     }
 
     @Test
-    void createTaskFromPost() throws IOException, InterruptedException {
+    void createUpdateTaskFromPost() throws IOException, InterruptedException {
         Assertions.assertTrue(taskManager.getAllTaskObjects().isEmpty());
         HttpResponse<String> response = sendFileAsPostMethodBody("DefaultTask.json", "task");
         Assertions.assertEquals(201, response.statusCode());
         Assertions.assertFalse(taskManager.getAllTaskObjects().isEmpty());
+        Assertions.assertEquals("summary", taskManager.getTaskObjectById(1L).getSummary());
+        response = sendFileAsPostMethodBody("UpdateTask.json", "task");
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("updated", taskManager.getTaskObjectById(1L).getSummary());
     }
 
     @Test
